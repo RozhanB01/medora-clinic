@@ -2,92 +2,97 @@ name: NOVEMBER LINE execution request
 
 on:
   issues:
-    types: [opened, edited, reopened]
+    types: [opened, reopened]
 
 permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+  contents: read
+
+concurrency:
+  group: november-line-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
 
 jobs:
-  create-execution-branch:
+  prepare-execution:
     if: startsWith(github.event.issue.title, '[NOVEMBER LINE EXECUTION]') && github.event.issue.user.login == github.repository_owner
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: دریافت کد
+      - name: دریافت نسخه اصلی
         uses: actions/checkout@v4
         with:
+          persist-credentials: true
           fetch-depth: 0
+          ref: ${{ github.event.repository.default_branch }}
 
-      - name: استخراج شاخه درخواستی
-        id: request
-        shell: bash
-        run: |
-          BODY_FILE="$RUNNER_TEMP/issue-body.txt"
-          cat > "$BODY_FILE" <<'BODY'
-          ${{ github.event.issue.body }}
-          BODY
-          BRANCH=$(sed -n 's/^\*\*شاخه پیشنهادی:\*\*[[:space:]]*//p' "$BODY_FILE" | head -n1 | tr -d '\r')
-          if [ -z "$BRANCH" ]; then
-            BRANCH="november-line/mission-${{ github.event.issue.number }}"
-          fi
-          BRANCH=$(printf '%s' "$BRANCH" | sed 's#[^A-Za-z0-9._/-]#-#g' | sed 's#//*#/#g')
-          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
-
-      - name: ساخت شاخه و ثبت درخواست
+      - name: ایجاد شناسه و فایل درخواست بدون اجرای متن کاربر
         shell: bash
         env:
-          BRANCH: ${{ steps.request.outputs.branch }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
+          set -euo pipefail
+          BRANCH="november-line/mission-$ISSUE_NUMBER"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
           git config user.name "november-line-bot"
           git config user.email "actions@users.noreply.github.com"
-          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+          git fetch origin "$DEFAULT_BRANCH"
+          if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+            git switch -c "$BRANCH" --track "origin/$BRANCH"
+          elif git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
             git fetch origin "$BRANCH"
-            git switch "$BRANCH"
+            git switch -c "$BRANCH" --track "origin/$BRANCH"
           else
-            git switch -c "$BRANCH"
+            git switch -c "$BRANCH" "origin/$DEFAULT_BRANCH"
           fi
           mkdir -p .november-line/requests
-          cat > ".november-line/requests/issue-${{ github.event.issue.number }}.md" <<'EOF'
-          # درخواست اجرای واقعی NOVEMBER LINE
-
-          این فایل به‌صورت خودکار از Issue ایجاد شده و نقطه شروع امن برای تغییرات واقعی پروژه است.
-
-          - شماره درخواست: #${{ github.event.issue.number }}
-          - ثبت‌کننده: @${{ github.event.issue.user.login }}
-          - وضعیت: آماده اجرای توسعه و کنترل کیفیت
-          - قانون: ادغام و انتشار فقط پس از تأیید مدیرعامل
-          EOF
-          git add .november-line/requests
-          if git diff --cached --quiet; then
-            echo "No request-file changes to commit."
-          else
-            git commit -m "chore(november-line): register execution request #${{ github.event.issue.number }}"
-            git push -u origin "$BRANCH"
+          node <<'NODE'
+          const fs = require('fs');
+          const issue = Number(process.env.ISSUE_NUMBER);
+          if (!Number.isSafeInteger(issue) || issue < 1) throw new Error('Invalid issue number');
+          const text = [
+            '# درخواست اجرای NOVEMBER LINE',
+            '',
+            'شماره: #'+issue,
+            'ثبت‌کننده: '+process.env.ISSUE_AUTHOR,
+            '',
+            '## عنوان',
+            process.env.ISSUE_TITLE || '',
+            '',
+            '## متن درخواست',
+            process.env.ISSUE_BODY || '',
+            '',
+            '## وضعیت',
+            'در انتظار پیاده‌سازی واقعی کد، تست و بررسی انسانی.',
+            'این گردش‌کار فقط درخواست را ثبت می‌کند و Agent خودکار اجرا نمی‌کند.'
+          ].join('\n');
+          fs.writeFileSync('.november-line/requests/issue-'+issue+'.md',text,'utf8');
+          NODE
+          git add ".november-line/requests/issue-$ISSUE_NUMBER.md"
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(november-line): register request #$ISSUE_NUMBER"
+            git push origin "$BRANCH"
           fi
 
-      - name: ساخت Draft PR
+      - name: ایجاد پیش‌نویس قابل بررسی
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ steps.request.outputs.branch }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
+          set -euo pipefail
+          BRANCH="november-line/mission-$ISSUE_NUMBER"
           EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
-          if [ -n "$EXISTING" ]; then
-            echo "Draft PR already exists: #$EXISTING"
-            exit 0
+          if [ -z "$EXISTING" ]; then
+            gh pr create --draft --base "$DEFAULT_BRANCH" --head "$BRANCH" \
+              --title "NOVEMBER LINE · درخواست #$ISSUE_NUMBER" \
+              --body "متصل به Issue #$ISSUE_NUMBER. این PR فقط ثبت اولیه درخواست است و به‌معنای تغییر واقعی کد یا انجام QA نیست. ادغام بعد از پیاده‌سازی، تست و تأیید مدیرعامل."
           fi
-          gh pr create \
-            --draft \
-            --base "${{ github.event.repository.default_branch }}" \
-            --head "$BRANCH" \
-            --title "NOVEMBER LINE · اجرای درخواست #${{ github.event.issue.number }}" \
-            --body "این PR از درخواست #${{ github.event.issue.number }} ساخته شده است. تغییرات واقعی باید روی همین شاخه انجام شوند؛ ادغام/انتشار بعد از QA و تأیید مدیرعامل."
-
-      - name: اعلام نتیجه در Issue
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ steps.request.outputs.branch }}
-        run: |
-          gh issue comment "${{ github.event.issue.number }}" --body "شاخه واقعی `$BRANCH` ساخته/به‌روزرسانی شد و Draft PR آماده بررسی است."
+          gh issue comment "$ISSUE_NUMBER" --body "درخواست ثبت شد. شاخه \`$BRANCH\` و Draft PR اولیه ایجاد/بررسی شدند. هنوز کدنویسی خودکار انجام نشده است."
