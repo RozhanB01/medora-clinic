@@ -8,12 +8,12 @@ on:
       - ".github/workflows/roznex-ai-company-os-qa.yml"
       - ".github/workflows/november-line-execution.yml"
       - ".github/workflows/november-line-pr-guard.yml"
-      - ".github/workflows/november-line-execution.yml"
-      - ".github/workflows/november-line-pr-guard.yml"
   pull_request:
     paths:
       - "roznex-ai-company-os/**"
       - ".github/workflows/roznex-ai-company-os-qa.yml"
+      - ".github/workflows/november-line-execution.yml"
+      - ".github/workflows/november-line-pr-guard.yml"
 
 permissions:
   contents: read
