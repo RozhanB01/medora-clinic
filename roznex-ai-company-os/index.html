@@ -256,8 +256,8 @@ body{direction:rtl}
 <section class="realCard"><h3>وضعیت پروژه</h3>
 <div class="realStatus"><span>مخزن</span><b dir="ltr">RozhanB01/roznex</b></div>
 <div class="realStatus"><span>شاخه اصلی</span><b dir="ltr">main</b></div>
-<div class="realStatus"><span>تغییر واقعی ثبت‌شده از داخل این سایت</span><b>خیر</b></div>
-<div class="realStatus"><span>انتشار خودکار</span><b>غیرفعال تا اتصال امن</b></div>
+<div class="realStatus"><span>وضعیت درخواست اجرای واقعی</span><b id="realWriteStatus">هنوز ارسال نشده</b></div>
+<div class="realStatus"><span>انتشار خودکار</span><b id="realDeployStatus">فقط پس از تایید مدیرعامل</b></div>
 <div class="realWarn">گزارش «کار انجام شد» توسط کارمندهای مجازی، به‌تنهایی به معنی تغییر واقعی فایل‌های گیت‌هاب نیست. این بخش عمداً این دو را از هم جدا نگه می‌دارد.</div>
 </section>
 <section class="realCard"><h3>پیش‌نمایش تغییرات واقعی</h3>
@@ -883,15 +883,55 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
  function installRealChanges(){
    const modal=document.getElementById('realChangesModal'); if(!modal)return;
    const input=document.getElementById('realBranchInput');
-   const saved=localStorage.getItem('roznex-real-branch')||''; if(input)input.value=saved;
+   const status=document.getElementById('realWriteStatus');
+   const deployStatus=document.getElementById('realDeployStatus');
+   const pad=n=>String(n).padStart(2,'0');
+   const branchSuggestion=()=>{const d=new Date();return 'roznex/mission-'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'-'+pad(d.getHours())+pad(d.getMinutes())};
+   const saved=localStorage.getItem('roznex-real-branch')||'';
+   const pending=localStorage.getItem('roznex-real-request-pending');
+   if(input)input.value=saved;
+   if(status&&pending)status.textContent='درخواست آماده ثبت در GitHub';
+   if(deployStatus)deployStatus.textContent='فقط پس از تایید مدیرعامل';
    document.getElementById('realChangesClose').onclick=()=>modal.classList.remove('show');
-   modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show')});
-   document.getElementById('saveRealBranch').onclick=()=>{const v=(input?.value||'').trim();if(!v)return notify('نام شاخه را وارد کن');localStorage.setItem('roznex-real-branch',v);notify('نام شاخه ذخیره شد')};
+   modal.addEventListener('click',ev=>{if(ev.target===modal)modal.classList.remove('show')});
+   document.getElementById('saveRealBranch').onclick=()=>{
+     let v=(input?.value||'').trim();
+     if(!v){v=branchSuggestion();if(input)input.value=v}
+     localStorage.setItem('roznex-real-branch',v);
+     if(status)status.textContent='شاخه هدف ثبت شد';
+     notify('نام شاخه ذخیره شد');
+   };
    document.getElementById('openRealRepo').onclick=()=>window.open('https://github.com/RozhanB01/roznex','_blank','noopener');
    document.getElementById('sendRealRequest').onclick=()=>{
      const mission=(document.getElementById('missionTitle')?.textContent||'ماموریت ROZNEX').trim();
-     const body=['## درخواست اجرای واقعی ROZNEX','', '**ماموریت:** '+mission,'','**درخواست:** این ماموریت باید به تغییر واقعی کد تبدیل شود؛ ابتدا روی شاخه جدا، سپس بررسی کیفیت و فقط بعد از تایید مدیرعامل ادغام/انتشار شود.','','**قانون:** هیچ تغییر مستقیمی روی main بدون تایید مدیرعامل انجام نشود.'].join('\n');
-     const u='https://github.com/RozhanB01/roznex/issues/new?title='+encodeURIComponent('[ROZNEX] '+mission.slice(0,70))+'&body='+encodeURIComponent(body);
+     const project=(document.getElementById('projectPick')?.value||'ROZNEX').trim();
+     const phase=(document.getElementById('missionPhasePill')?.textContent||'آماده').trim();
+     const qa=(document.getElementById('qaPill')?.textContent||'کنترل کیفیت آماده').trim();
+     let branch=(input?.value||localStorage.getItem('roznex-real-branch')||'').trim();
+     if(!branch){branch=branchSuggestion();if(input)input.value=branch}
+     localStorage.setItem('roznex-real-branch',branch);
+     const body=[
+       '## درخواست اجرای واقعی ROZNEX',
+       '',
+       '**پروژه:** '+project,
+       '**ماموریت:** '+mission,
+       '**شاخه پیشنهادی:** '+branch,
+       '**وضعیت فعلی:** '+phase,
+       '**کنترل کیفیت:** '+qa,
+       '',
+       '### روند الزامی',
+       '- تغییرات روی شاخه جدا انجام شود.',
+       '- تست و کنترل کیفیت قبل از ادغام انجام شود.',
+       '- هیچ تغییر مستقیمی روی main انجام نشود.',
+       '- Merge و Deploy فقط پس از تایید مدیرعامل انجام شود.',
+       '',
+       '### منبع درخواست',
+       'ROZNEX AI Company OS · '+location.href
+     ].join('\n');
+     localStorage.setItem('roznex-real-request-pending',JSON.stringify({mission,project,branch,createdAt:new Date().toISOString()}));
+     if(status)status.textContent='درخواست آماده ثبت در GitHub';
+     notify('درخواست واقعی آماده شد؛ در GitHub ثبتش کن');
+     const u='https://github.com/RozhanB01/roznex/issues/new?title='+encodeURIComponent('[ROZNEX EXECUTION] '+mission.slice(0,65))+'&body='+encodeURIComponent(body);
      window.open(u,'_blank','noopener');
    };
    document.getElementById('previewRealChanges').onclick=()=>{
