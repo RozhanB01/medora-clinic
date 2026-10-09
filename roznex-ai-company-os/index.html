@@ -280,7 +280,8 @@ body{direction:rtl}
 (() => {
 'use strict';
 const $ = s => document.querySelector(s);
-const API_BASE=String(window.NOVEMBER_LINE_API_BASE||window.ROZNEX_API_BASE||localStorage.getItem('november-line-api-url')||'').replace(/\/$/,'');
+const DEFAULT_RENDER_API=(location.hostname==='november-line-office-preview.onrender.com')?'https://november-line-ai-gateway-preview.onrender.com':'';
+const API_BASE=String(window.NOVEMBER_LINE_API_BASE||window.ROZNEX_API_BASE||localStorage.getItem('november-line-api-url')||DEFAULT_RENDER_API).replace(/\/$/,'');
 const HAS_REMOTE_BACKEND=!!API_BASE;
 const apiUrl=path=>API_BASE+path;
 const canvas = $('#gl');
