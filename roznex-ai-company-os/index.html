@@ -281,7 +281,8 @@ body{direction:rtl}
 'use strict';
 const $ = s => document.querySelector(s);
 const DEFAULT_RENDER_API=(location.hostname==='november-line-office-preview.onrender.com')?'https://november-line-ai-gateway-preview.onrender.com':'';
-const API_BASE=String(window.NOVEMBER_LINE_API_BASE||window.ROZNEX_API_BASE||localStorage.getItem('november-line-api-url')||DEFAULT_RENDER_API).replace(/\/$/,'');
+const SAVED_API_BASE=localStorage.getItem('november-line-api-url');
+const API_BASE=String(SAVED_API_BASE==='off'?'':(SAVED_API_BASE||window.NOVEMBER_LINE_API_BASE||window.ROZNEX_API_BASE||DEFAULT_RENDER_API)).replace(/\/$/,'');
 const HAS_REMOTE_BACKEND=!!API_BASE;
 const apiUrl=path=>API_BASE+path;
 const canvas = $('#gl');
@@ -966,7 +967,7 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
       }finally{clearTimeout(timer)}
    };
    apiButton.onclick=()=>{
-      const current=localStorage.getItem('november-line-api-url')||'https://november-line-ai-gateway-preview.onrender.com';
+      const current=(localStorage.getItem('november-line-api-url')||'')==='off'?'':(localStorage.getItem('november-line-api-url')||'https://november-line-ai-gateway-preview.onrender.com');
       const value=window.prompt('آدرس HTTPS سرور NOVEMBER LINE را وارد کنید؛ برای قطع اتصال خالی بگذارید. کلید API را وارد نکنید.',current);
       if(value===null)return;
       let trimmed=value.trim();
@@ -974,7 +975,7 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
       if(trimmed){
          try{const u=new URL(trimmed);if(u.protocol!=='https:'&&!(u.protocol==='http:'&&['localhost','127.0.0.1'].includes(u.hostname)))throw Error('protocol');if(u.username||u.password||u.search||u.hash||u.pathname!=='/')throw Error('format')}catch(err){notify('آدرس باید HTTPS و بدون مسیر، رمز یا پارامتر باشد');return}
          localStorage.setItem('november-line-api-url',trimmed);
-      }else localStorage.removeItem('november-line-api-url');
+      }else localStorage.setItem('november-line-api-url','off');
       location.reload();
    };
    document.getElementById('app').appendChild(tray);
