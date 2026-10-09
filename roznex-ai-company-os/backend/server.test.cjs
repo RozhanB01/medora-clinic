@@ -1,9 +1,9 @@
 'use strict';
 const {test,after}=require('node:test');
 const assert=require('node:assert/strict');
-const {server}=require('./server.cjs');
 const ORIGIN='https://november-line.example';
-process.env.NL_ALLOWED_ORIGIN ||= ORIGIN;
+process.env.NL_ALLOWED_ORIGIN=ORIGIN;
+const {server}=require('./server.cjs');
 let address;
 async function endpoint(){
  if(!address){await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));address='http://127.0.0.1:'+server.address().port}
