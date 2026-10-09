@@ -7,6 +7,6 @@
 </defs>
 <rect width="512" height="512" rx="112" fill="url(#g)"/>
 <rect x="56" y="56" width="400" height="400" rx="92" fill="none" stroke="#ffffff" stroke-width="18" opacity=".95"/>
-<path d="M152 356V156h116c82 0 120 38 120 98 0 43-21 73-62 88l79 114h-76l-69-104h-43v104h-65zm65-58h47c39 0 58-14 58-43 0-28-19-41-58-41h-47v84z" fill="#fff"/>
+<text x="256" y="300" text-anchor="middle" fill="#ffffff" font-size="150" font-weight="900" font-family="Arial,Helvetica,sans-serif" letter-spacing="-12">NL</text>
 <circle cx="387" cy="132" r="26" fill="#8057ff"/>
 </svg>

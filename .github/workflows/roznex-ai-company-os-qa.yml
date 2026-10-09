@@ -1,4 +1,4 @@
-name: ROZNEX AI Company OS QA
+name: NOVEMBER LINE QA
 
 on:
   push:
@@ -58,7 +58,7 @@ jobs:
           if(ids.length) fail('Persian characters leaked into ids: '+ids.join(', '));
           if(classes.length) fail('Persian characters leaked into classes: '+classes.join(', '));
 
-          if(manifest.name.indexOf('ROZNEX')<0) fail('Manifest name invalid');
+          if(manifest.name.indexOf('NOVEMBER LINE')<0) fail('Manifest name invalid');
           if(manifest.display!=='standalone') fail('Manifest display must be standalone');
           if(manifest.start_url!=='./' || manifest.scope!=='./') fail('Manifest path scope invalid');
           if(!Array.isArray(manifest.icons)||!manifest.icons.length) fail('Manifest icon missing');
@@ -67,5 +67,7 @@ jobs:
           if(!sw.includes("self.addEventListener('fetch'")) fail('Service worker fetch handler missing');
           if(!icon.includes('<svg')) fail('PWA icon is not SVG');
 
-          console.log('ROZNEX QA passed:', scripts.length, 'scripts validated');
+          if(html.includes('window.NOVEMBER LINE_API_BASE')) fail('Invalid rebrand leaked into JS identifier');
+          if(html.includes('RozhanB01/roznex')) fail('Wrong GitHub repository target remains');
+          console.log('NOVEMBER LINE QA passed:', scripts.length, 'scripts validated');
           NODE

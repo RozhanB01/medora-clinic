@@ -1,0 +1,93 @@
+name: NOVEMBER LINE execution request
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  create-execution-branch:
+    if: startsWith(github.event.issue.title, '[NOVEMBER LINE EXECUTION]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: دریافت کد
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: استخراج شاخه درخواستی
+        id: request
+        shell: bash
+        run: |
+          BODY_FILE="$RUNNER_TEMP/issue-body.txt"
+          cat > "$BODY_FILE" <<'BODY'
+          ${{ github.event.issue.body }}
+          BODY
+          BRANCH=$(sed -n 's/^\*\*شاخه پیشنهادی:\*\*[[:space:]]*//p' "$BODY_FILE" | head -n1 | tr -d '\r')
+          if [ -z "$BRANCH" ]; then
+            BRANCH="november-line/mission-${{ github.event.issue.number }}"
+          fi
+          BRANCH=$(printf '%s' "$BRANCH" | sed 's#[^A-Za-z0-9._/-]#-#g' | sed 's#//*#/#g')
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: ساخت شاخه و ثبت درخواست
+        shell: bash
+        env:
+          BRANCH: ${{ steps.request.outputs.branch }}
+        run: |
+          git config user.name "november-line-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            git fetch origin "$BRANCH"
+            git switch "$BRANCH"
+          else
+            git switch -c "$BRANCH"
+          fi
+          mkdir -p .november-line/requests
+          cat > ".november-line/requests/issue-${{ github.event.issue.number }}.md" <<'EOF'
+          # درخواست اجرای واقعی NOVEMBER LINE
+
+          این فایل به‌صورت خودکار از Issue ایجاد شده و نقطه شروع امن برای تغییرات واقعی پروژه است.
+
+          - شماره درخواست: #${{ github.event.issue.number }}
+          - ثبت‌کننده: @${{ github.event.issue.user.login }}
+          - وضعیت: آماده اجرای توسعه و کنترل کیفیت
+          - قانون: ادغام و انتشار فقط پس از تأیید مدیرعامل
+          EOF
+          git add .november-line/requests
+          if git diff --cached --quiet; then
+            echo "No request-file changes to commit."
+          else
+            git commit -m "chore(november-line): register execution request #${{ github.event.issue.number }}"
+            git push -u origin "$BRANCH"
+          fi
+
+      - name: ساخت Draft PR
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.request.outputs.branch }}
+        run: |
+          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            echo "Draft PR already exists: #$EXISTING"
+            exit 0
+          fi
+          gh pr create \
+            --draft \
+            --base "${{ github.event.repository.default_branch }}" \
+            --head "$BRANCH" \
+            --title "NOVEMBER LINE · اجرای درخواست #${{ github.event.issue.number }}" \
+            --body "این PR از درخواست #${{ github.event.issue.number }} ساخته شده است. تغییرات واقعی باید روی همین شاخه انجام شوند؛ ادغام/انتشار بعد از QA و تأیید مدیرعامل."
+
+      - name: اعلام نتیجه در Issue
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.request.outputs.branch }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" --body "شاخه واقعی `$BRANCH` ساخته/به‌روزرسانی شد و Draft PR آماده بررسی است."

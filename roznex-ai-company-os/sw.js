@@ -1,4 +1,4 @@
-const CACHE='roznex-ai-company-os-v23';
+const CACHE='november-line-v24';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(CORE.map(url=>cache.add(url).catch(()=>null)))).then(()=>self.skipWaiting()));
