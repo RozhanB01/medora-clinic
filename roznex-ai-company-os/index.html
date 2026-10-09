@@ -280,7 +280,7 @@ body{direction:rtl}
 (() => {
 'use strict';
 const $ = s => document.querySelector(s);
-const API_BASE=String(window.NOVEMBER_LINE_API_BASE||window.ROZNEX_API_BASE||'').replace(/\/$/,'');
+const API_BASE=String(window.NOVEMBER_LINE_API_BASE||window.ROZNEX_API_BASE||localStorage.getItem('november-line-api-url')||'').replace(/\/$/,'');
 const HAS_REMOTE_BACKEND=!!API_BASE;
 const apiUrl=path=>API_BASE+path;
 const canvas = $('#gl');
@@ -653,7 +653,7 @@ function focusSelected(){cameraMode='first';document.body.classList.remove('ceoM
 function updateMiniMap(){const body=$('#miniMapBody');if(!body)return;let dots=body.querySelectorAll('.mapDot');if(dots.length!==agents.length){dots.forEach(d=>d.remove());for(const a of agents){const d=document.createElement('i');d.className='mapDot';d.style.background=a.color;d.title=faAgentName(a.name);body.appendChild(d);a.mapDot=d}}for(const a of agents){a.mapDot.style.left=((a.pos[0]+11)/22*100)+'%';a.mapDot.style.top=((a.pos[2]+9)/18*100)+'%'}$('#youDot').style.left=((camera.x+11)/22*100)+'%';$('#youDot').style.top=((camera.z+9)/18*100)+'%'}
 
 function renderChat(){const root=$('#chat');root.innerHTML='';(chats[selected.name]||[]).slice(-8).forEach(m=>{const d=document.createElement('div');d.className='bubble '+m.from;d.textContent=m.text;root.appendChild(d)});root.scrollTop=root.scrollHeight}
-async function sendChat(){const input=$('#chatInput'),txt=input.value.trim();if(!txt)return;(chats[selected.name]||(chats[selected.name]=[])).push({from:'ceo',text:txt});remember(`CEO: ${txt}`,selected.name,'agent');input.value='';renderChat();const a=selected;let ans='';try{if(HAS_REMOTE_BACKEND){const r=await fetch(apiUrl('/api/chat'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent:a.name,message:txt,mission:currentMission,project:{name:$('#projectPick').value},profile:{role:a.role,specialty:a.specialty||a.role}})});if(r.ok){const d=await r.json();ans=d.reply||'';$('#runtimeLabel').textContent=d.provider==='openai'?'AI live':'Local AI'}}}catch(e){}if(!ans){const answers={ARIA:'دریافت شد. آن را به کارهای قابل اجرا تبدیل می‌کنم و در صورت نیاز برای تأیید برمی‌گردانم.',NEX:'دریافت شد. معماری و پیاده‌سازی فنی را بررسی می‌کنم.',LUNA:'دریافت شد. تجربه کاربر و رابط را بر اساس این درخواست بازطراحی می‌کنم.',ORION:'دریافت شد. تحقیق و اعتبارسنجی را شروع می‌کنم.',MIRA:'دریافت شد. از منظر رشد، محتوا و عرضه بررسی می‌کنم.',ATLAS:'دریافت شد. معیار پذیرش و تست‌های لازم را می‌چینم.'};ans=answers[a.name]||`دریافت شد. به‌عنوان ${a.role} از تخصص ${a.specialty||a.role} روی این درخواست کار می‌کنم.`}chats[a.name].push({from:'agent',text:ans});remember(`${a.name}: ${ans}`,a.name,'agent');renderChat();if(voiceMode)speak(ans);saveState()}
+async function sendChat(){const input=$('#chatInput'),txt=input.value.trim();if(!txt)return;(chats[selected.name]||(chats[selected.name]=[])).push({from:'ceo',text:txt});remember(`CEO: ${txt}`,selected.name,'agent');input.value='';renderChat();const a=selected;let ans='';try{if(HAS_REMOTE_BACKEND){const r=await fetch(apiUrl('/api/chat'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent:a.name,message:txt,mission:currentMission,project:{name:$('#projectPick').value},profile:{role:a.role,specialty:a.specialty||a.role}})});if(r.ok){const d=await r.json();ans=d.reply||'';$('#runtimeLabel').textContent=d.provider==='openai'?'AI live':'Local AI'}}}catch(e){}if(!ans){$('#runtimeLabel').textContent=HAS_REMOTE_BACKEND?'سرور پاسخ نداد · حالت نمایشی':'حالت نمایشی · بدون اتصال';const answers={ARIA:'دریافت شد. آن را به کارهای قابل اجرا تبدیل می‌کنم و در صورت نیاز برای تأیید برمی‌گردانم.',NEX:'دریافت شد. معماری و پیاده‌سازی فنی را بررسی می‌کنم.',LUNA:'دریافت شد. تجربه کاربر و رابط را بر اساس این درخواست بازطراحی می‌کنم.',ORION:'دریافت شد. تحقیق و اعتبارسنجی را شروع می‌کنم.',MIRA:'دریافت شد. از منظر رشد، محتوا و عرضه بررسی می‌کنم.',ATLAS:'دریافت شد. معیار پذیرش و تست‌های لازم را می‌چینم.'};ans=answers[a.name]||`دریافت شد. به‌عنوان ${a.role} از تخصص ${a.specialty||a.role} روی این درخواست کار می‌کنم.`}chats[a.name].push({from:'agent',text:ans});remember(`${a.name}: ${ans}`,a.name,'agent');renderChat();if(voiceMode)speak(ans);saveState()}
 function addActivity(agent,text){const item={time:new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'}),agent,text};activity.unshift(item);activity=activity.slice(0,7);renderActivity()}
 let activity=[{time:'15:10',agent:'ARIA',text:'دفتر مرکزی آماده است'},{time:'15:11',agent:'NEX',text:'محیط کاری تعاملی فعال شد'},{time:'15:11',agent:'ATLAS',text:'کنترل کیفیت ماموریت آماده است'}];
 function renderActivity(){const r=$('#activity');r.innerHTML=activity.map(x=>`<div><time>${x.time}</time><b>${faAgentName(x.agent)}</b><span>${x.text}</span></div>`).join('')}
@@ -918,8 +918,21 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
    const more=document.createElement('button');more.className='tool';more.id='moreMenuBtn';more.innerHTML='<span class="ico">•••</span><span>بیشتر</span>';
    tools.append(changes,more);
    const tray=document.createElement('div');tray.className='moreTray';tray.id='moreTray';
-   const items=[['voiceBtn','گفت‌وگوی صوتی'],['screenBtn','اشتراک صفحه'],['issueTool','مسائل'],['prTool','درخواست‌های ادغام'],['servicesTool','سرویس‌ها'],['queueTool','صف کار'],['approvalTool','تاییدها'],['healthTool','سلامت سامانه'],['graphicsTool','تنظیم گرافیک'],['relationTool','روابط کاری'],['economyTool','اقتصاد شرکت'],['memoryTool','حافظه'],['hireTool','استخدام کارمند'],['installAppBtn','نصب برنامه']];
+   const items=[['aiConnectionBtn','اتصال سرور هوش مصنوعی'],['voiceBtn','گفت‌وگوی صوتی'],['screenBtn','اشتراک صفحه'],['issueTool','مسائل'],['prTool','درخواست‌های ادغام'],['servicesTool','سرویس‌ها'],['queueTool','صف کار'],['approvalTool','تاییدها'],['healthTool','سلامت سامانه'],['graphicsTool','تنظیم گرافیک'],['relationTool','روابط کاری'],['economyTool','اقتصاد شرکت'],['memoryTool','حافظه'],['hireTool','استخدام کارمند'],['installAppBtn','نصب برنامه']];
    tray.innerHTML=items.map(x=>'<button data-target="'+x[0]+'">'+x[1]+'</button>').join('');
+   const apiButton=document.createElement('button');apiButton.id='aiConnectionBtn';apiButton.hidden=true;document.getElementById('app').appendChild(apiButton);
+   apiButton.onclick=()=>{
+      const current=localStorage.getItem('november-line-api-url')||'';
+      const value=window.prompt('آدرس HTTPS سرور NOVEMBER LINE را وارد کنید؛ برای قطع اتصال خالی بگذارید. کلید API را وارد نکنید.',current);
+      if(value===null)return;
+      let trimmed=value.trim();
+      if(trimmed.endsWith('/'))trimmed=trimmed.slice(0,-1);
+      if(trimmed){
+         try{const u=new URL(trimmed);if(u.protocol!=='https:'&&!(u.protocol==='http:'&&['localhost','127.0.0.1'].includes(u.hostname)))throw Error('protocol');if(u.username||u.password||u.search||u.hash||u.pathname!=='/')throw Error('format')}catch(err){notify('آدرس باید HTTPS و بدون مسیر، رمز یا پارامتر باشد');return}
+         localStorage.setItem('november-line-api-url',trimmed);
+      }else localStorage.removeItem('november-line-api-url');
+      location.reload();
+   };
    document.getElementById('app').appendChild(tray);
    more.onclick=e=>{e.stopPropagation();tray.classList.toggle('show')};
    tray.onclick=e=>{const b=e.target.closest('button[data-target]');if(!b)return;document.getElementById(b.dataset.target)?.click();tray.classList.remove('show')};
