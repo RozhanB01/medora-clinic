@@ -653,7 +653,28 @@ function focusSelected(){cameraMode='first';document.body.classList.remove('ceoM
 function updateMiniMap(){const body=$('#miniMapBody');if(!body)return;let dots=body.querySelectorAll('.mapDot');if(dots.length!==agents.length){dots.forEach(d=>d.remove());for(const a of agents){const d=document.createElement('i');d.className='mapDot';d.style.background=a.color;d.title=faAgentName(a.name);body.appendChild(d);a.mapDot=d}}for(const a of agents){a.mapDot.style.left=((a.pos[0]+11)/22*100)+'%';a.mapDot.style.top=((a.pos[2]+9)/18*100)+'%'}$('#youDot').style.left=((camera.x+11)/22*100)+'%';$('#youDot').style.top=((camera.z+9)/18*100)+'%'}
 
 function renderChat(){const root=$('#chat');root.innerHTML='';(chats[selected.name]||[]).slice(-8).forEach(m=>{const d=document.createElement('div');d.className='bubble '+m.from;d.textContent=m.text;root.appendChild(d)});root.scrollTop=root.scrollHeight}
-async function sendChat(){const input=$('#chatInput'),txt=input.value.trim();if(!txt)return;(chats[selected.name]||(chats[selected.name]=[])).push({from:'ceo',text:txt});remember(`CEO: ${txt}`,selected.name,'agent');input.value='';renderChat();const a=selected;let ans='';try{if(HAS_REMOTE_BACKEND){const r=await fetch(apiUrl('/api/chat'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent:a.name,message:txt,mission:currentMission,project:{name:$('#projectPick').value},profile:{role:a.role,specialty:a.specialty||a.role}})});if(r.ok){const d=await r.json();ans=d.reply||'';$('#runtimeLabel').textContent=d.provider==='openai'?'AI live':'Local AI'}}}catch(e){}if(!ans){$('#runtimeLabel').textContent=HAS_REMOTE_BACKEND?'سرور در دسترس نیست':'بدون اتصال به هوش مصنوعی';ans=HAS_REMOTE_BACKEND?'ارتباط با سرور هوش مصنوعی برقرار نشد. این پاسخ یک پیام سیستمی است و هیچ مأموریتی اجرا نشده است.':'این نسخه به سرور هوش مصنوعی متصل نیست. این فقط پیام سیستمی است؛ برای پاسخ هوشمند و اجرای واقعی مأموریت باید اتصال فعال شود.';}if(false){const answers={ARIA:'دریافت شد. آن را به کارهای قابل اجرا تبدیل می‌کنم و در صورت نیاز برای تأیید برمی‌گردانم.',NEX:'دریافت شد. معماری و پیاده‌سازی فنی را بررسی می‌کنم.',LUNA:'دریافت شد. تجربه کاربر و رابط را بر اساس این درخواست بازطراحی می‌کنم.',ORION:'دریافت شد. تحقیق و اعتبارسنجی را شروع می‌کنم.',MIRA:'دریافت شد. از منظر رشد، محتوا و عرضه بررسی می‌کنم.',ATLAS:'دریافت شد. معیار پذیرش و تست‌های لازم را می‌چینم.'};ans=answers[a.name]||`دریافت شد. به‌عنوان ${a.role} از تخصص ${a.specialty||a.role} روی این درخواست کار می‌کنم.`}chats[a.name].push({from:'agent',text:ans});remember(`${a.name}: ${ans}`,a.name,'agent');renderChat();if(voiceMode)speak(ans);saveState()}
+async function sendChat(){
+ const input=$('#chatInput'),txt=input.value.trim();
+ if(!txt)return;
+ const a=selected;
+ (chats[a.name]||(chats[a.name]=[])).push({from:'ceo',text:txt});
+ remember('CEO: '+txt,a.name,'agent');
+ input.value='';renderChat();
+ let ans='';
+ if(HAS_REMOTE_BACKEND){
+  try{
+   const r=await fetch(apiUrl('/api/chat'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent:a.name,message:txt,project:{name:$('#projectPick').value}})});
+   if(r.ok){const d=await r.json();if(d.provider==='openai'&&typeof d.reply==='string'&&d.reply.trim()){ans=d.reply;$('#runtimeLabel').textContent='هوش مصنوعی آنلاین'}}
+  }catch(e){}
+ }
+ if(!ans){
+  $('#runtimeLabel').textContent=HAS_REMOTE_BACKEND?'سرور در دسترس نیست':'بدون اتصال به هوش مصنوعی';
+  ans=HAS_REMOTE_BACKEND?'ارتباط با سرور هوش مصنوعی برقرار نشد. هیچ مأموریتی اجرا نشده است.':'این برنامه به سرور هوش مصنوعی متصل نیست. برای گفت‌وگوی واقعی، اتصال سرور را فعال کنید. هیچ مأموریتی اجرا نشده است.';
+ }
+ chats[a.name].push({from:'agent',text:ans});
+ remember(a.name+': '+ans,a.name,'agent');
+ renderChat();if(voiceMode)speak(ans);saveState();
+}
 function addActivity(agent,text){const item={time:new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'}),agent,text};activity.unshift(item);activity=activity.slice(0,7);renderActivity()}
 let activity=[{time:'15:10',agent:'ARIA',text:'دفتر مرکزی آماده است'},{time:'15:11',agent:'NEX',text:'محیط کاری تعاملی فعال شد'},{time:'15:11',agent:'ATLAS',text:'کنترل کیفیت ماموریت آماده است'}];
 function renderActivity(){const r=$('#activity');r.innerHTML=activity.map(x=>`<div><time>${x.time}</time><b>${faAgentName(x.agent)}</b><span>${x.text}</span></div>`).join('')}
