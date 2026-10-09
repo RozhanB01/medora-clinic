@@ -965,7 +965,7 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
       }finally{clearTimeout(timer)}
    };
    apiButton.onclick=()=>{
-      const current=localStorage.getItem('november-line-api-url')||'';
+      const current=localStorage.getItem('november-line-api-url')||'https://november-line-ai-gateway-preview.onrender.com';
       const value=window.prompt('آدرس HTTPS سرور NOVEMBER LINE را وارد کنید؛ برای قطع اتصال خالی بگذارید. کلید API را وارد نکنید.',current);
       if(value===null)return;
       let trimmed=value.trim();
