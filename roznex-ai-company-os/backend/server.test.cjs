@@ -47,3 +47,13 @@ test('without a server-side API key chat is unavailable',async()=>{
  assert.equal(r.status,503);
  assert.equal((await r.json()).error,'not_configured');
 });
+
+test('malformed JSON returns 400 instead of a server error when configured',async()=>{
+ if(!process.env.OPENAI_API_KEY)return;
+ const r=await fetch((await endpoint())+'/api/chat',{method:'POST',headers:{origin:ORIGIN,'content-type':'application/json'},body:'{bad-json'});
+ assert.equal(r.status,400);assert.equal((await r.json()).error,'invalid_json');
+});
+test('unsupported method never reaches provider',async()=>{
+ const r=await fetch((await endpoint())+'/api/chat',{method:'PUT',headers:{origin:ORIGIN}});
+ assert.equal(r.status,405);
+});
