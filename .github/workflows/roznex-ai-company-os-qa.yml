@@ -53,6 +53,8 @@ jobs:
           if(execution.includes("cat > \"$BODY_FILE\"")) fail('Unsafe issue body interpolation detected');
           if(!html.includes('api.github.com/repos/RozhanB01/medora-clinic')) fail('Real public GitHub status fetch missing');
           if(!html.includes('ghEscape=')) fail('GitHub HTML escaping missing');
+          if(!html.includes('november-line-api-url')) fail('AI server settings missing');
+          if(!html.includes('حالت نمایشی · بدون اتصال')) fail('Offline status must be honest');
 
           if(html.includes('/api/state')) fail('Static build must not poll /api/state');
           if(html.includes("fetch('/api/")) fail('Direct relative API fetch found; use guarded apiUrl()');
