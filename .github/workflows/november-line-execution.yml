@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   create-execution-branch:
-    if: startsWith(github.event.issue.title, '[NOVEMBER LINE EXECUTION]')
+    if: startsWith(github.event.issue.title, '[NOVEMBER LINE EXECUTION]') && github.event.issue.user.login == github.repository_owner
     runs-on: ubuntu-latest
     steps:
       - name: دریافت کد
