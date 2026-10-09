@@ -25,6 +25,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check AI gateway JavaScript syntax
+        run: node --check roznex-ai-company-os/backend/server.cjs
+
       - name: Validate static application
         shell: bash
         run: |
@@ -32,6 +35,10 @@ jobs:
           const fs=require('fs');
 
           const html=fs.readFileSync('roznex-ai-company-os/index.html','utf8');
+          const gateway=fs.readFileSync('roznex-ai-company-os/backend/server.cjs','utf8');
+          if(!gateway.includes("process.env.OPENAI_API_KEY")) throw new Error('Gateway key must be server-side');
+          if(!gateway.includes("process.env.NL_ALLOWED_ORIGIN")) throw new Error('Gateway origin guard missing');
+          if(!gateway.includes("allowedAgents.has(agent)")) throw new Error('Agent allowlist missing');
           const manifest=JSON.parse(fs.readFileSync('roznex-ai-company-os/manifest.webmanifest','utf8'));
           const sw=fs.readFileSync('roznex-ai-company-os/sw.js','utf8');
           const icon=fs.readFileSync('roznex-ai-company-os/icon.svg','utf8');
