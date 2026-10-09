@@ -280,7 +280,7 @@ body{direction:rtl}
 (() => {
 'use strict';
 const $ = s => document.querySelector(s);
-const API_BASE=String(window.NOVEMBER LINE_API_BASE||'').replace(/\/$/,'');
+const API_BASE=String(window.NOVEMBER_LINE_API_BASE||window.ROZNEX_API_BASE||'').replace(/\/$/,'');
 const HAS_REMOTE_BACKEND=!!API_BASE;
 const apiUrl=path=>API_BASE+path;
 const canvas = $('#gl');
