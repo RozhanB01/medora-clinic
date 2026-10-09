@@ -1,0 +1,21 @@
+{
+  "name": "ROZNEX — سیستم‌عامل شرکت هوش مصنوعی",
+  "short_name": "ROZNEX",
+  "description": "دفتر مجازی و سیستم‌عامل شرکت هوش مصنوعی ROZNEX",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#101318",
+  "theme_color": "#101318",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
