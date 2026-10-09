@@ -1,0 +1,71 @@
+name: ROZNEX AI Company OS QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "roznex-ai-company-os/**"
+      - ".github/workflows/roznex-ai-company-os-qa.yml"
+  pull_request:
+    paths:
+      - "roznex-ai-company-os/**"
+      - ".github/workflows/roznex-ai-company-os-qa.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate static application
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+
+          const html=fs.readFileSync('roznex-ai-company-os/index.html','utf8');
+          const manifest=JSON.parse(fs.readFileSync('roznex-ai-company-os/manifest.webmanifest','utf8'));
+          const sw=fs.readFileSync('roznex-ai-company-os/sw.js','utf8');
+          const icon=fs.readFileSync('roznex-ai-company-os/icon.svg','utf8');
+
+          const fail=msg=>{throw new Error(msg)};
+
+          if(html.includes('/api/state')) fail('Static build must not poll /api/state');
+          if(html.includes("fetch('/api/")) fail('Direct relative API fetch found; use guarded apiUrl()');
+          if(!html.includes('const HAS_REMOTE_BACKEND=!!API_BASE')) fail('Backend guard missing');
+          if(!html.includes('manifest.webmanifest')) fail('Manifest link missing');
+          if(!html.includes("serviceWorker.register('./sw.js'")) fail('Service worker registration missing');
+          if(!html.includes('id="installAppBtn"')) fail('Install button missing');
+          if(!html.includes('getDisplayMedia')) fail('Real screen sharing missing');
+          if(!html.includes('realWriteStatus')) fail('Real execution status missing');
+          if(!html.includes('format:2')) fail('Versioned backup format missing');
+          if(!html.includes('sha256Text')) fail('Backup checksum helper missing');
+
+          const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
+          if(!scripts.length) fail('No scripts found');
+          scripts.forEach((src,i)=>{
+            try{ new Function(src); }
+            catch(err){ fail('Script '+i+' syntax error: '+err.message); }
+          });
+
+          const persian=/[\u0600-\u06FF]/;
+          const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]).filter(x=>persian.test(x));
+          const classes=[...html.matchAll(/\bclass="([^"]+)"/g)].flatMap(m=>m[1].split(/\s+/)).filter(x=>persian.test(x));
+          if(ids.length) fail('Persian characters leaked into ids: '+ids.join(', '));
+          if(classes.length) fail('Persian characters leaked into classes: '+classes.join(', '));
+
+          if(manifest.name.indexOf('ROZNEX')<0) fail('Manifest name invalid');
+          if(manifest.display!=='standalone') fail('Manifest display must be standalone');
+          if(manifest.start_url!=='./' || manifest.scope!=='./') fail('Manifest path scope invalid');
+          if(!Array.isArray(manifest.icons)||!manifest.icons.length) fail('Manifest icon missing');
+
+          if(!sw.includes("self.addEventListener('install'")) fail('Service worker install handler missing');
+          if(!sw.includes("self.addEventListener('fetch'")) fail('Service worker fetch handler missing');
+          if(!icon.includes('<svg')) fail('PWA icon is not SVG');
+
+          console.log('ROZNEX QA passed:', scripts.length, 'scripts validated');
+          NODE
