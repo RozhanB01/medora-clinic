@@ -20,3 +20,9 @@
 
 ## تست سریع
 `node --check roznex-ai-company-os/backend/server.cjs`
+
+## تست و استقرار آزمایشی
+
+برای اجرای تست‌ها: `node --test roznex-ai-company-os/backend/server.test.cjs`.
+
+فایل `render.yaml` در ریشه مخزن یک Blueprint اختیاری Render است. مقدار `OPENAI_API_KEY` و `NL_ALLOWED_ORIGIN` باید به‌صورت محرمانه از پنل Render تنظیم شود. صرف وجود فایل، سرویس را راه‌اندازی نمی‌کند. همچنین آدرس بک‌اند باید در پیکربندی فرانت‌اند `window.NOVEMBER_LINE_API_BASE` پیش از بارگذاری برنامه قرار گیرد. برای استفاده عمومی، احراز هویت و محدودیت مصرف مستقل الزامی است.
