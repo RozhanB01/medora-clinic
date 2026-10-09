@@ -262,10 +262,10 @@ body{direction:rtl}
 <div class="realWarn">این نسخه یک محیط سه‌بعدی با شبیه‌ساز محلی وظایف است. بدون سرور هوش مصنوعی و دسترسی مجاز به مخزن، گفت‌وگوها و اعلان «کار انجام شد» به‌معنای اجرای واقعی تغییرات نیستند.</div>
 </section>
 <section class="realCard"><h3>پیش‌نمایش تغییرات واقعی</h3>
-<p style="font-size:8px;line-height:1.8;color:#9ba8b6;margin:0">اگر شاخه‌ای در GitHub واقعاً ساخته شده است، نام آن را وارد کنید. این صفحه به‌تنهایی شاخه یا کد جدید ایجاد نمی‌کند.</p>
+<p style="font-size:8px;line-height:1.8;color:#9ba8b6;margin:0">پس از ثبت Issue، شاخه‌ای با نام november-line/mission-شماره‌درخواست ساخته می‌شود. آن نام را از GitHub بردار و برای مقایسه وارد کن. این برنامه خودش کدنویسی نمی‌کند.</p>
 <div class="realField"><label>نام شاخه تغییرات</label><input id="realBranchInput" placeholder="مثلاً feature/redesign"/></div>
 <div class="realActions"><button class="primary" id="sendRealRequest">ارسال درخواست اجرای واقعی</button><button id="previewRealChanges">پیش‌نمایش تغییرات</button><button id="saveRealBranch">ذخیره شاخه</button><button id="openRealRepo">باز کردن مخزن</button></div>
-<div class="realWarn">پس از ثبت Issue در GitHub، گردش‌کار فقط شاخه و Draft PR اولیه می‌سازد؛ این کار به‌معنای توسعه خودکار کد نیست. تغییرات فنی باید جداگانه توسط توسعه‌دهنده یا عامل متصل اجرا، تست و بازبینی شوند. انتشار بعد از کنترل کیفیت انجام می‌شود.</div>
+<div class="realWarn">پس از ثبت Issue در GitHub، گردش‌کار فقط شاخه شماره‌گذاری‌شده و Draft PR اولیه می‌سازد؛ نام شاخه دلخواه در این مرحله استفاده نمی‌شود و توسعه خودکار کد انجام نمی‌شود. تغییرات فنی باید جداگانه توسط توسعه‌دهنده یا عامل متصل اجرا، تست و بازبینی شوند. انتشار بعد از کنترل کیفیت انجام می‌شود.</div>
 </section>
 </div></div></section></div>
 <div class="screenShareDock" id="screenShareDock"><video id="screenSharePreview" autoplay muted playsinline></video><div class="screenShareMeta"><div><b>اشتراک صفحه محلی</b><span> · چیزی آپلود نمی‌شود</span></div><button id="screenShareStop">توقف</button></div></div><div class="toast" id="toast"></div>
@@ -908,7 +908,7 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
    const status=document.getElementById('realWriteStatus');
    const deployStatus=document.getElementById('realDeployStatus');
    const pad=n=>String(n).padStart(2,'0');
-   const branchSuggestion=()=>{const d=new Date();return 'november-line/mission-'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'-'+pad(d.getHours())+pad(d.getMinutes())};
+   const branchSuggestion=()=>'';
    const saved=localStorage.getItem('november-line-real-branch')||'';
    const pending=localStorage.getItem('november-line-real-request-pending');
    if(input)input.value=saved;
@@ -918,7 +918,7 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
    modal.addEventListener('click',ev=>{if(ev.target===modal)modal.classList.remove('show')});
    document.getElementById('saveRealBranch').onclick=()=>{
      let v=(input?.value||'').trim();
-     if(!v){v=branchSuggestion();if(input)input.value=v}
+     if(!v){notify('نام شاخه را از درخواست ثبت‌شده در GitHub بردار');return}
      localStorage.setItem('november-line-real-branch',v);
      if(status)status.textContent='شاخه هدف ثبت شد';
      notify('نام شاخه ذخیره شد');
@@ -930,14 +930,13 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
      const phase=(document.getElementById('missionPhasePill')?.textContent||'آماده').trim();
      const qa=(document.getElementById('qaPill')?.textContent||'کنترل کیفیت آماده').trim();
      let branch=(input?.value||localStorage.getItem('november-line-real-branch')||'').trim();
-     if(!branch){branch=branchSuggestion();if(input)input.value=branch}
-     localStorage.setItem('november-line-real-branch',branch);
+     if(branch)localStorage.setItem('november-line-real-branch',branch);
      const body=[
        '## درخواست اجرای واقعی NOVEMBER LINE',
        '',
        '**پروژه:** '+project,
        '**ماموریت:** '+mission,
-       '**شاخه پیشنهادی:** '+branch,
+       '**شاخه پیشنهادی:** '+(branch||'بعد از ثبت Issue، به‌صورت خودکار از شماره آن ایجاد می‌شود'),
        '**وضعیت فعلی:** '+phase,
        '**کنترل کیفیت:** '+qa,
        '',
@@ -952,7 +951,7 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
      ].join('\n');
      localStorage.setItem('november-line-real-request-pending',JSON.stringify({mission,project,branch,createdAt:new Date().toISOString()}));
      if(status)status.textContent='فقط پیش‌نویس محلی ساخته شد؛ تکمیل ثبت در GitHub لازم است';
-     notify('درخواست آماده شد؛ با ثبت درخواست، شاخه و پیش‌نویس درخواست ادغام واقعی ساخته می‌شود');
+     notify('صفحه ثبت Issue باز می‌شود؛ ثبت نهایی درخواست داخل GitHub انجام می‌شود');
      const u='https://github.com/RozhanB01/medora-clinic/issues/new?title='+encodeURIComponent('[NOVEMBER LINE EXECUTION] '+mission.slice(0,65))+'&body='+encodeURIComponent(body);
      window.open(u,'_blank','noopener');
    };
