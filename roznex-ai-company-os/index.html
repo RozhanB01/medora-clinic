@@ -939,9 +939,31 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
    const more=document.createElement('button');more.className='tool';more.id='moreMenuBtn';more.innerHTML='<span class="ico">•••</span><span>بیشتر</span>';
    tools.append(changes,more);
    const tray=document.createElement('div');tray.className='moreTray';tray.id='moreTray';
-   const items=[['aiConnectionBtn','اتصال سرور هوش مصنوعی'],['voiceBtn','گفت‌وگوی صوتی'],['screenBtn','اشتراک صفحه'],['issueTool','مسائل'],['prTool','درخواست‌های ادغام'],['servicesTool','سرویس‌ها'],['queueTool','صف کار'],['approvalTool','تاییدها'],['healthTool','سلامت سامانه'],['graphicsTool','تنظیم گرافیک'],['relationTool','روابط کاری'],['economyTool','اقتصاد شرکت'],['memoryTool','حافظه'],['hireTool','استخدام کارمند'],['installAppBtn','نصب برنامه']];
+   const items=[['aiHealthBtn','بررسی وضعیت سرور'],['aiConnectionBtn','اتصال سرور هوش مصنوعی'],['voiceBtn','گفت‌وگوی صوتی'],['screenBtn','اشتراک صفحه'],['issueTool','مسائل'],['prTool','درخواست‌های ادغام'],['servicesTool','سرویس‌ها'],['queueTool','صف کار'],['approvalTool','تاییدها'],['healthTool','سلامت سامانه'],['graphicsTool','تنظیم گرافیک'],['relationTool','روابط کاری'],['economyTool','اقتصاد شرکت'],['memoryTool','حافظه'],['hireTool','استخدام کارمند'],['installAppBtn','نصب برنامه']];
    tray.innerHTML=items.map(x=>'<button data-target="'+x[0]+'">'+x[1]+'</button>').join('');
    const apiButton=document.createElement('button');apiButton.id='aiConnectionBtn';apiButton.hidden=true;document.getElementById('app').appendChild(apiButton);
+   const healthButton=document.createElement('button');healthButton.id='aiHealthBtn';healthButton.hidden=true;document.getElementById('app').appendChild(healthButton);
+   healthButton.onclick=async()=>{
+      if(!API_BASE){notify('آدرس سرور تنظیم نشده است؛ از گزینه اتصال سرور استفاده کنید');return}
+      const label=document.getElementById('runtimeLabel');
+      if(label)label.textContent='در حال بررسی اتصال سرور…';
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+      try{
+         const response=await fetch(apiUrl('/health'),{signal:controller.signal,cache:'no-store'});
+         if(!response.ok)throw Error('HTTP '+response.status);
+         const state=await response.json();
+         if(state.ok===true&&state.configured===true){
+            if(label)label.textContent='سرور آماده · کلید AI تنظیم شده';
+            notify('سرور پاسخ داد؛ اتصال مدل با ارسال پیام آزمایش می‌شود');
+         }else if(state.ok===true){
+            if(label)label.textContent='سرور فعال · کلید AI تنظیم نشده';
+            notify('سرور روشن است اما کلید هوش مصنوعی تنظیم نشده');
+         }else throw Error('invalid health');
+      }catch(e){
+         if(label)label.textContent='تأیید اتصال ممکن نشد';
+         notify('بررسی سرور ناموفق بود؛ آدرس، CORS و اینترنت را بررسی کنید');
+      }finally{clearTimeout(timer)}
+   };
    apiButton.onclick=()=>{
       const current=localStorage.getItem('november-line-api-url')||'';
       const value=window.prompt('آدرس HTTPS سرور NOVEMBER LINE را وارد کنید؛ برای قطع اتصال خالی بگذارید. کلید API را وارد نکنید.',current);
