@@ -28,6 +28,9 @@ jobs:
       - name: Check AI gateway JavaScript syntax
         run: node --check roznex-ai-company-os/backend/server.cjs
 
+      - name: Run AI gateway API tests
+        run: node --test roznex-ai-company-os/backend/server.test.cjs
+
       - name: Validate static application
         shell: bash
         run: |

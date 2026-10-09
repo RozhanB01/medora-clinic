@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: november-line-ai-gateway
+    runtime: node
+    rootDir: roznex-ai-company-os
+    buildCommand: node --check backend/server.cjs && node --test backend/server.test.cjs
+    startCommand: node backend/server.cjs
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: NL_ALLOWED_ORIGIN
+        sync: false
