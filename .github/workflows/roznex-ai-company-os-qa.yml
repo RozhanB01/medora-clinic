@@ -54,6 +54,8 @@ jobs:
           if(!html.includes('api.github.com/repos/RozhanB01/medora-clinic')) fail('Real public GitHub status fetch missing');
           if(!html.includes('ghEscape=')) fail('GitHub HTML escaping missing');
           if(!html.includes('november-line-api-url')) fail('AI server settings missing');
+          if(!html.includes("apiUrl('/health')")) fail('Backend health check missing');
+          if(!html.includes('سرور فعال · کلید AI تنظیم نشده')) fail('Health status must reflect missing API key');
           if(!html.includes('حالت نمایشی · بدون اتصال')) fail('Offline status must be honest');
 
           if(html.includes('/api/state')) fail('Static build must not poll /api/state');
