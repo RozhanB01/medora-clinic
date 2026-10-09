@@ -1,0 +1,57 @@
+name: NOVEMBER LINE mission review gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "roznex-ai-company-os/**"
+      - ".november-line/**"
+      - ".github/workflows/november-line-*.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  verify-mission-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify mission evidence for ready PRs
+        shell: bash
+        env:
+          PR_HEAD: ${{ github.head_ref }}
+          PR_BASE: ${{ github.base_ref }}
+          PR_DRAFT: ${{ github.event.pull_request.draft }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "Manual workflow check: no pull request context."
+            exit 0
+          fi
+          if [[ "$PR_HEAD" != november-line/mission-* ]]; then
+            echo "Not a NOVEMBER LINE mission branch; regular QA applies."
+            exit 0
+          fi
+          if [[ "$PR_DRAFT" == "true" ]]; then
+            echo "Draft request is allowed while implementation is pending."
+            exit 0
+          fi
+          git fetch origin "$PR_BASE" --depth=100
+          CHANGED=$(git diff --name-only "origin/$PR_BASE"...HEAD)
+          printf '%s\n' "$CHANGED"
+          if [[ -z "$CHANGED" ]]; then
+            echo "::error::No committed changes found."
+            exit 1
+          fi
+          if ! printf '%s\n' "$CHANGED" | grep -Ev '^\.november-line/requests/|^$' >/dev/null; then
+            echo "::error::Cannot mark a mission ready with only a registration marker."
+            exit 1
+          fi
+          echo "Mission has implementation changes; still requires full QA, human review, and explicit CEO approval."
