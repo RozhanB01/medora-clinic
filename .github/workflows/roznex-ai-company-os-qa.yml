@@ -6,6 +6,10 @@ on:
     paths:
       - "roznex-ai-company-os/**"
       - ".github/workflows/roznex-ai-company-os-qa.yml"
+      - ".github/workflows/november-line-execution.yml"
+      - ".github/workflows/november-line-pr-guard.yml"
+      - ".github/workflows/november-line-execution.yml"
+      - ".github/workflows/november-line-pr-guard.yml"
   pull_request:
     paths:
       - "roznex-ai-company-os/**"
@@ -33,6 +37,12 @@ jobs:
           const icon=fs.readFileSync('roznex-ai-company-os/icon.svg','utf8');
 
           const fail=msg=>{throw new Error(msg)};
+          const execution=fs.readFileSync('.github/workflows/november-line-execution.yml','utf8');
+          if(!execution.includes('github.event.issue.user.login == github.repository_owner')) fail('Workflow must be owner-gated');
+          if(!execution.includes('november-line/mission-$ISSUE_NUMBER')) fail('Workflow branch naming must use issue number');
+          if(execution.includes("cat > \"$BODY_FILE\"")) fail('Unsafe issue body interpolation detected');
+          if(!html.includes('api.github.com/repos/RozhanB01/medora-clinic')) fail('Real public GitHub status fetch missing');
+          if(!html.includes('ghEscape=')) fail('GitHub HTML escaping missing');
 
           if(html.includes('/api/state')) fail('Static build must not poll /api/state');
           if(html.includes("fetch('/api/")) fail('Direct relative API fetch found; use guarded apiUrl()');
