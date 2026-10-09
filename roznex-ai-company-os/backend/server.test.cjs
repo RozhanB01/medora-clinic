@@ -57,3 +57,15 @@ test('unsupported method never reaches provider',async()=>{
  const r=await fetch((await endpoint())+'/api/chat',{method:'PUT',headers:{origin:ORIGIN}});
  assert.equal(r.status,405);
 });
+
+test('requires JSON content-type before accepting chat',async()=>{
+ const r=await fetch((await endpoint())+'/api/chat',{method:'POST',headers:{origin:ORIGIN,'content-type':'text/plain'},body:'hello'});
+ assert.equal(r.status,415);
+ assert.equal((await r.json()).error,'content_type_required');
+});
+test('health includes numeric uptime',async()=>{
+ const r=await fetch((await endpoint())+'/health');
+ const data=await r.json();
+ assert.equal(typeof data.uptimeSeconds,'number');
+ assert.ok(data.uptimeSeconds>=0);
+});

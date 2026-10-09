@@ -12,8 +12,10 @@ const MODEL=process.env.NL_MODEL||'gpt-4.1-mini';
 const API_KEY=process.env.OPENAI_API_KEY||'';
 const CAP=Number(process.env.NL_MAX_REQUEST_BYTES||8192);
 const MAX_INFLIGHT=Number(process.env.NL_MAX_INFLIGHT||4);
+const MAX_OUTPUT_TOKENS=Number(process.env.NL_MAX_OUTPUT_TOKENS||700);
 let inFlight=0;
 const counts=new Map();
+const SERVER_STARTED=Date.now();
 const perMinute=Number(process.env.NL_RATE_LIMIT||15);
 const allowedAgents=new Set(['ARIA','NEX','LUNA','ORION','MIRA','ATLAS']);
 const roles={
@@ -35,7 +37,7 @@ function rate(ip){
 }
 const server=http.createServer(async(req,res)=>{
  const origin=req.headers.origin||'';
- if(req.method==='GET'&&req.url==='/health'){reply(res,200,{ok:true,configured:Boolean(API_KEY)},origin);return}
+ if(req.method==='GET'&&req.url==='/health'){reply(res,200,{ok:true,configured:Boolean(API_KEY),uptimeSeconds:Math.floor((Date.now()-SERVER_STARTED)/1000)},origin);return}
  if(req.url!=='/api/chat'){reply(res,404,{error:'not_found'},origin);return}
  if(req.method==='OPTIONS'){
   if(!ORIGIN||origin!==ORIGIN){reply(res,403,{error:'origin_denied'},origin);return}
@@ -44,6 +46,7 @@ const server=http.createServer(async(req,res)=>{
  if(req.method!=='POST'){reply(res,405,{error:'method_not_allowed'},origin);return}
  // A public browser endpoint is only for non-sensitive chat; never grant GitHub write permissions.
  if(!ORIGIN||origin!==ORIGIN){reply(res,403,{error:'origin_denied'},origin);return}
+ if(!String(req.headers['content-type']||'').toLowerCase().startsWith('application/json')){reply(res,415,{error:'content_type_required'},origin);return}
  if(!rate(req.socket.remoteAddress||'unknown')){reply(res,429,{error:'rate_limited'},origin);return}
  if(!API_KEY){reply(res,503,{error:'not_configured'},origin);return}
  if(inFlight>=MAX_INFLIGHT){reply(res,503,{error:'server_busy'},origin);return}
@@ -65,7 +68,7 @@ const server=http.createServer(async(req,res)=>{
   let response;
   try{response=await fetch('https://api.openai.com/v1/chat/completions',{
    method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
-   body:JSON.stringify({model:MODEL,temperature:.4,max_tokens:700,messages:[{role:'system',content:prompt},{role:'user',content:'پروژه: '+project+'\n'+message}]})
+   body:JSON.stringify({model:MODEL,temperature:.4,max_tokens:MAX_OUTPUT_TOKENS,messages:[{role:'system',content:prompt},{role:'user',content:'پروژه: '+project+'\n'+message}]})
   })}finally{clearTimeout(timeout)}
   if(!response.ok){reply(res,502,{error:'provider_unavailable'},origin);return}
   const out=await response.json();
