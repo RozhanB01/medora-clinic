@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>Roznex AI Company OS — Minimal Office</title>
+<title>ROZNEX — سیستم‌عامل شرکت هوش مصنوعی</title>
 <style>
 :root{--ink:#101318;--panel:rgba(18,22,28,.90);--line:rgba(255,255,255,.16);--muted:#99a5b5;--violet:#8057ff;--good:#5fe59b;--warn:#f6c85f;--bad:#ff7070}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#14181d;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff}button,input,textarea,select{font:inherit}
@@ -132,6 +132,56 @@ body.ceoMode .vignette{background:radial-gradient(circle at 50% 48%,transparent 
   body.ceoMode .agentTag button{min-width:78px}
 }
 </style>
+<style id="ROZNEX_FA_UI_V22">
+:root{--fa-panel:rgba(13,18,24,.94)}
+body{direction:rtl}
+.brandText,.logo{direction:ltr}
+.brandText b{font-size:12px}
+.brandText span{direction:rtl;text-align:right}
+.toolbar{direction:rtl;gap:10px;padding:6px 9px}
+.toolbar .brand{order:3;margin-left:auto;margin-right:0;border-right:0;border-left:1px solid #d7d9dd;padding-right:0;padding-left:10px}
+.toolbar .tools{order:2;direction:rtl;justify-content:flex-start;overflow:visible}
+.toolbar .projectPick{order:1;margin-left:0;margin-right:auto;direction:rtl}
+.toolbar .tools>.tool{display:none}
+#missionOpen,#workspaceTopBtn,#meetingTool,#salesTool,#ceoViewBtn,#changesTool,#moreMenuBtn{display:flex!important}
+#missionOpen{order:-2}
+#changesTool{background:#111;color:#fff}
+.moreTray{position:absolute;z-index:190;top:64px;right:205px;width:min(540px,calc(100vw - 30px));display:none;grid-template-columns:repeat(3,minmax(120px,1fr));gap:7px;padding:10px;border-radius:16px;background:rgba(13,18,24,.96);border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 55px rgba(0,0,0,.35);backdrop-filter:blur(18px);direction:rtl}
+.moreTray.show{display:grid}
+.moreTray button{border:1px solid rgba(255,255,255,.10);background:#18212b;color:#eef4f8;border-radius:10px;padding:10px 8px;font:800 9px system-ui;cursor:pointer}
+.moreTray button:hover{background:#243140}
+.agentTag button{direction:rtl;min-width:112px}
+.agentTag .tagText{align-items:flex-end}
+.agentTag i{margin-left:0;margin-right:auto}
+.workspaceShell,.modal,.sidePanel,.missionPanel,.executiveHud,.commandBox{direction:rtl}
+.wsTabs{direction:rtl;justify-content:flex-start}
+.opsHero .repo,.opsHero .meta{direction:ltr;text-align:left}
+#realChangesModal .workspaceShell{width:min(820px,94vw);height:auto;max-height:88vh}
+.realChangesGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.realCard{background:#0d141c;border:1px solid rgba(255,255,255,.09);border-radius:15px;padding:14px}
+.realCard h3{margin:0 0 10px;font-size:11px}
+.realStatus{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:8px}
+.realStatus:last-child{border-bottom:0}
+.realStatus b{font-size:9px}
+.realWarn{margin-top:10px;padding:10px;border-radius:11px;background:rgba(246,200,95,.10);border:1px solid rgba(246,200,95,.25);font-size:8px;line-height:1.8;color:#e7d69e}
+.realField{display:grid;gap:6px;margin-top:10px}
+.realField label{font-size:8px;color:#92a0af}
+.realField input{width:100%;border:1px solid #2f3a46;background:#090f15;color:#fff;border-radius:10px;padding:10px;outline:none;direction:ltr;text-align:left}
+.realActions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.realActions button{border:1px solid rgba(255,255,255,.12);background:#18222d;color:#fff;border-radius:10px;padding:9px 11px;font:800 8px system-ui;cursor:pointer}
+.realActions button.primary{background:#7257e8;border-color:#8f79ef}
+.realActions button:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:1100px){
+ .toolbar .tools{overflow-x:auto}
+ #meetingTool,#ceoViewBtn{display:none!important}
+ .moreTray{right:12px}
+}
+@media(max-width:720px){
+ #workspaceTopBtn,#salesTool{display:none!important}
+ .moreTray{grid-template-columns:1fr 1fr;right:8px;left:8px;width:auto}
+ .realChangesGrid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -187,7 +237,29 @@ body.ceoMode .vignette{background:radial-gradient(circle at 50% 48%,transparent 
   <div class="workspaceBack" id="opsModal"><section class="workspaceShell opsShell"><header class="workspaceHeader"><div><small>ROZNEX OPERATIONS</small><h2 id="opsTitle">GitHub Operations</h2><p id="opsSubtitle">Read-only snapshot · write actions require CEO approval</p></div><div class="wsHeaderActions"><span class="wsLive">● VERIFIED</span><button id="opsClose">✕</button></div></header><nav class="wsTabs" id="opsTabs"><button class="active" data-ops="github">GitHub</button><button data-ops="services">Services</button><button data-ops="queue">Queue</button><button data-ops="health">System Health</button></nav><div class="wsContent" id="opsContent"></div></section></div>
   <div class="commandPalette" id="commandPalette"><div class="commandBox"><div class="cmdHead"><b>⌘ ROZNEX COMMAND</b><span>Esc to close</span></div><input id="commandInput" placeholder="دستور بنویس… مثلاً: برو کنار NEX، CEO view، ماموریت جدید"/><div id="commandResults" class="commandResults"></div></div></div>
   <div class="systemDock"><span id="saveStateDot" class="sysDot ok"></span><b id="saveStateText">State saved</b><span>•</span><span id="fpsLabel">60 FPS</span><span>•</span><span id="runtimeLabel">PRODUCTION client runtime</span><span>•</span><span id="animLabel">RIG · IDLE</span><span>•</span><span id="gazeLabel">LOOK · FORWARD</span></div>
-  <div class="toast" id="toast"></div>
+  <div class="workspaceBack" id="realChangesModal">
+<section class="workspaceShell">
+<header class="workspaceHeader">
+<div><small>تغییرات واقعی پروژه</small><h2>پیش‌نمایش کد و انتشار</h2><p>اینجا فقط تغییراتی نمایش داده می‌شود که واقعاً در گیت‌هاب ثبت شده باشند.</p></div>
+<div class="wsHeaderActions"><span class="wsLive" id="realConnBadge">● نیازمند اتصال نوشتن امن</span><button id="realChangesClose">✕</button></div>
+</header>
+<div class="wsContent">
+<div class="realChangesGrid">
+<section class="realCard"><h3>وضعیت پروژه</h3>
+<div class="realStatus"><span>مخزن</span><b dir="ltr">RozhanB01/roznex</b></div>
+<div class="realStatus"><span>شاخه اصلی</span><b dir="ltr">main</b></div>
+<div class="realStatus"><span>تغییر واقعی ثبت‌شده از داخل این سایت</span><b>خیر</b></div>
+<div class="realStatus"><span>انتشار خودکار</span><b>غیرفعال تا اتصال امن</b></div>
+<div class="realWarn">گزارش «کار انجام شد» توسط کارمندهای مجازی، به‌تنهایی به معنی تغییر واقعی فایل‌های گیت‌هاب نیست. این بخش عمداً این دو را از هم جدا نگه می‌دارد.</div>
+</section>
+<section class="realCard"><h3>پیش‌نمایش تغییرات واقعی</h3>
+<p style="font-size:8px;line-height:1.8;color:#9ba8b6;margin:0">اگر یک شاخه واقعی برای پروژه ساخته شده، نام آن را وارد کن تا صفحه مقایسه گیت‌هاب باز شود.</p>
+<div class="realField"><label>نام شاخه تغییرات</label><input id="realBranchInput" placeholder="مثلاً feature/redesign"/></div>
+<div class="realActions"><button class="primary" id="previewRealChanges">پیش‌نمایش تغییرات</button><button id="saveRealBranch">ذخیره شاخه</button><button id="openRealRepo">باز کردن مخزن</button></div>
+<div class="realWarn">برای اینکه نکس واقعاً Commit و Deploy انجام دهد، مرحله بعد باید احراز هویت امن گیت‌هاب/بک‌اند اضافه شود. توکن یا رمز عبور نباید داخل کد این صفحه ذخیره شود.</div>
+</section>
+</div></div></section></div>
+<div class="toast" id="toast"></div>
   <div class="workspaceBack" id="relationshipModal"><section class="workspaceShell relationshipShell"><header class="workspaceHeader"><div><small>SELF-ORGANIZING WORK GRAPH</small><h2>Autonomous Workload, Capacity & Dependency Graph</h2><p>See self-created subtasks, capacity, deadline risk, temporary helpers, dependencies and handoffs.</p></div><div class="wsHeaderActions"><span class="wsLive"><span class="relationPulse"></span>LIVE GRAPH</span><button id="relationshipClose">✕</button></div></header><nav class="wsTabs"><button class="active">Dependency Map</button><button id="selfOrganizeBtn" class="autoOrgBtn">Auto-organize</button><button id="relationshipRefresh">Refresh graph</button><button id="relationshipFocusBlocked">Focus blocked</button></nav><div class="wsContent"><div class="relationSummary"><div class="relationMetric"><span>RELATIONS</span><b id="relationCount">0</b></div><div class="relationMetric"><span>READY</span><b id="relationReady">0</b></div><div class="relationMetric"><span>WAITING</span><b id="relationWaiting">0</b></div></div><div class="schedulerStrip"><div class="schedulerMetric live"><span>RUNNING NOW</span><b id="schedulerRunning">0</b></div><div class="schedulerMetric"><span>PARALLEL CAPACITY</span><b id="schedulerCapacity">3</b></div><div class="schedulerMetric"><span>HELP REQUESTS</span><b id="schedulerHelp">0</b></div><div class="schedulerMetric"><span>ARIA ESCALATIONS</span><b id="schedulerEscalations">0</b></div></div><div class="selfOrgStrip"><div class="selfOrgMetric"><span>SUBTASKS</span><b id="orgSubtasks">0</b></div><div class="selfOrgMetric risk"><span>DEADLINE RISK</span><b id="orgRisk">0</b></div><div class="selfOrgMetric good"><span>TEAM LOAD</span><b id="orgLoad">0%</b></div><div class="selfOrgMetric"><span>TEMP HELPERS</span><b id="orgTemps">0</b></div></div><div class="orgGrid"><section class="wsCard"><h3>Agent capacity & deadline</h3><div id="workloadBoard"></div></section><section class="wsCard"><h3>Self-created subtasks</h3><div id="subtaskBoard"></div><h3 style="margin-top:12px">COO interventions</h3><div id="cooInterventions"></div></section></div><div class="relationshipGrid"><section class="wsCard graphPanel"><h3>Live branching task graph</h3><div id="relationshipGraph"></div><p class="relationHint">Branches can execute simultaneously. A green edge is satisfied, a glowing edge is an active handoff, and amber nodes are requesting assistance.</p></section><section class="wsCard"><h3>Parallel scheduler</h3><div id="schedulerTimeline" class="handoffTimeline"></div><h3 style="margin-top:12px">Help queue</h3><div id="helpQueue" class="helpQueue"></div><h3 style="margin-top:12px">Handoff timeline</h3><div id="handoffTimeline" class="handoffTimeline"></div></section></div></div></section></div>
   <div class="workspaceBack" id="economyModal"><section class="workspaceShell economyShell"><header class="workspaceHeader"><div><small>COMPANY ECONOMY & PERFORMANCE</small><h2>Mission Economics · KPI · Capacity Forecast</h2><p>Estimate cost, critical-path ETA, team efficiency and hiring pressure before committing the company.</p></div><div class="wsHeaderActions"><span class="wsLive">● FORECAST</span><button id="economyClose">✕</button></div></header><nav class="wsTabs"><button class="active">Executive forecast</button><button id="economyRefresh">Recalculate</button><button id="economyApplyDeadline">Apply deadline</button></nav><div class="wsContent"><div class="economyTop"><div class="economyMetric good"><span>PROJECTED COST</span><b id="econCost">0 cr</b></div><div class="economyMetric"><span>CRITICAL PATH</span><b id="econEta">0m</b></div><div class="economyMetric"><span>TEAM EFFICIENCY</span><b id="econEfficiency">100%</b></div><div class="economyMetric"><span>FORECAST CONFIDENCE</span><b id="econConfidence">—</b></div><div class="economyMetric"><span>BOTTLENECK</span><b id="econBottleneck">—</b></div></div><div class="economyGrid"><section class="wsCard"><h3>Agent performance & projected workload</h3><div class="economyTable" id="economyTable"></div></section><section class="wsCard"><h3>CEO intake decision</h3><div class="forecastDecision" id="forecastDecision"><strong id="forecastDecisionTitle">Ready to forecast</strong><p id="forecastDecisionText">Create or decompose a mission to estimate delivery economics.</p></div><div class="economyControls"><label>Budget · company credits<input type="number" min="50" step="25" id="economyBudget" value="500"></label><label>Deadline · minutes from now<input type="number" min="30" step="15" id="economyDeadline" value="120"></label></div><div class="economyActions"><button class="primary" id="economyCommit">Save forecast</button><button id="economyHire">Open hiring</button></div><div class="hireSignal" id="hireSignal"><b>Hiring signal</b><span>No additional capacity recommendation yet.</span></div><h3 style="margin-top:12px">Forecast history</h3><div class="economyHistory" id="economyHistory"></div></section></div></div></section></div>
   <div class="workspaceBack" id="salesModal"><section class="workspaceShell salesShell"><header class="workspaceHeader"><div><small>CLIENT & SALES PIPELINE</small><h2>Lead → Proposal → Mission</h2><p>Qualify incoming work, forecast delivery economics, generate a proposal and convert an approved deal into an executable mission.</p></div><div class="wsHeaderActions"><span class="wsLive">● CRM</span><button id="salesClose">✕</button></div></header><nav class="wsTabs"><button class="active">Pipeline</button><button id="salesNew">New lead</button><button id="salesAnalyze">Analyze</button><button id="salesProposal">Generate proposal</button></nav><div class="wsContent"><div class="salesTop"><div class="salesMetric"><span>OPEN LEADS</span><b id="salesOpen">0</b></div><div class="salesMetric"><span>PIPELINE VALUE</span><b id="salesValue">0 cr</b></div><div class="salesMetric"><span>AVG WIN PROB.</span><b id="salesWin">—</b></div><div class="salesMetric"><span>ZERO-COST READINESS</span><b id="salesReady">100%</b></div></div><div class="salesLayout"><section class="wsCard"><h3>Client intake</h3><div class="salesForm"><label>Client<input id="clientName" placeholder="Example Co."></label><label>Project<input id="clientProject" placeholder="AI website / app / automation"></label><label>Type<select id="clientType"><option>Web / 3D Experience</option><option>AI Application</option><option>Internal Automation</option><option>Industrial Platform</option><option>Mobile App</option></select></label><label>Priority<select id="clientPriority"><option>Normal</option><option>High</option><option>Critical</option></select></label><label>Budget · credits<input id="clientBudget" type="number" min="50" step="25" value="600"></label><label>Deadline · days<input id="clientDeadline" type="number" min="1" step="1" value="14"></label><textarea id="clientBrief" placeholder="What does the client need? Key features, constraints, desired result…"></textarea></div><div class="salesActions"><button class="primary" id="salesSaveLead">＋ Save lead</button><button id="salesQualify">Qualify with ARIA</button><button class="win" id="salesConvert">✓ Approve & convert to mission</button></div><h3 style="margin-top:12px">Pipeline</h3><div id="salesPipeline" class="pipeline"></div></section><section class="wsCard"><div id="proposalPreview" class="proposalBox"><div class="proposalHero"><div><span>PROPOSAL PREVIEW</span><b>Select or create a lead</b></div><span>CEO approval required</span></div><p class="proposalText">ARIA will combine the brief with the current team economy model to estimate scope, team, ETA, risk and price. The proposal can then be converted directly into a company mission.</p></div><div class="prodReadiness"><b>Zero-cost deployment readiness</b><div class="readinessBar"><i id="readinessBar" style="width:100%"></i></div><div class="readinessList"><div>✓ 3D office + agents</div><div>✓ Mission orchestration</div><div>✓ QA + approvals</div><div>✓ Economy forecasting</div><div>✓ IndexedDB persistence</div><div>✓ Full backup / restore</div><div>✓ Public static hosting</div><div>✓ Mobile responsive UI</div></div></div></section></div></div></section></div>
@@ -242,9 +314,17 @@ function clipText(ctx,text,maxWidth){text=String(text||'');if(ctx.measureText(te
 function getLiveTexture(key){if(liveTextureCache.has(key))return liveTextureCache.get(key);const c=document.createElement('canvas');c.width=512;c.height=288;const texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);const item={canvas:c,ctx:c.getContext('2d'),texture,last:0,sig:''};liveTextureCache.set(key,item);return item}
 function uploadLiveTexture(item){gl.bindTexture(gl.TEXTURE_2D,item.texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,item.canvas)}
 function drawTexturePlane(p,s,texture,r=0){gl.useProgram(texProg);gl.bindBuffer(gl.ARRAY_BUFFER,quadBuffer);gl.enableVertexAttribArray(texLocP);gl.vertexAttribPointer(texLocP,3,gl.FLOAT,false,20,0);gl.enableVertexAttribArray(texLocUV);gl.vertexAttribPointer(texLocUV,2,gl.FLOAT,false,20,12);const mvp=M4.multiply(vp,M4.model(p,s,r));gl.uniformMatrix4fv(texLocM,false,mvp);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,texture);gl.uniform1i(texLocS,0);gl.disable(gl.CULL_FACE);gl.drawArrays(gl.TRIANGLES,0,6);gl.enable(gl.CULL_FACE)}
-function screenRoleLine(a){if(a.name==='NEX')return `PR ${githubSnapshot.prs.length}  ·  ISSUES ${githubSnapshot.issues.length}`;if(a.name==='LUNA')return 'DESIGN SYSTEM · UI FLOW';if(a.name==='ATLAS')return qaSummary?'QA GATE · '+qaSummary:'QA GATE · ARMED';if(a.name==='ORION')return 'RESEARCH · SOURCES · RISKS';if(a.name==='MIRA')return 'GROWTH · SEO · LAUNCH';if(a.name==='ARIA')return 'MISSION · HANDOFFS · APPROVALS';return (a.specialty||a.role||'SPECIALIST').toUpperCase()}
-function paintAgentScreen(a,t){const item=getLiveTexture('agent:'+a.name),task=tasks.find(x=>x.agent===a.name),sig=[a.status,a.task,task&&task.status,currentMission,qaSummary,graphicsQuality].join('|');const interval=graphicsQuality==='eco'?1000:graphicsQuality==='balanced'?650:350;if(item.sig===sig&&t-item.last<interval)return item.texture;item.sig=sig;item.last=t;const c=item.canvas,ctx=item.ctx;const accent=a.color||'#6f5ae8';ctx.clearRect(0,0,c.width,c.height);const g=ctx.createLinearGradient(0,0,c.width,c.height);g.addColorStop(0,'#09131c');g.addColorStop(1,'#111e28');ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle=accent;ctx.fillRect(0,0,10,c.height);ctx.fillStyle='rgba(255,255,255,.07)';ctx.fillRect(30,28,452,54);ctx.font='700 29px system-ui';ctx.fillStyle='#f6fbff';ctx.fillText(a.name,48,64);ctx.font='600 16px system-ui';ctx.fillStyle='#91a7b8';ctx.fillText(a.role,48,105);ctx.textAlign='right';ctx.fillStyle=a.status==='working'?'#66e5a2':a.status==='meeting'?'#72d8ff':(a.status==='waiting'||a.status==='waitingdep')?'#ffd46a':'#91a7b8';ctx.font='800 15px system-ui';ctx.fillText(statusText(a.status).toUpperCase(),465,62);ctx.textAlign='left';ctx.font='700 14px ui-monospace,monospace';ctx.fillStyle='#74dcff';ctx.fillText(screenRoleLine(a),48,142);ctx.font='500 17px system-ui';ctx.fillStyle='#d5e1e9';const line=clipText(ctx,(task&&task.task)||a.task||'Ready for a mission',410);ctx.fillText(line,48,181);const progVal=task?(task.status==='done'?1:task.status==='working'?.66:.18):(a.status==='working'?.58:a.status==='meeting'?.42:.08);ctx.fillStyle='#1c2b36';ctx.fillRect(48,213,416,14);ctx.fillStyle=accent;ctx.fillRect(48,213,416*progVal,14);ctx.fillStyle='#718595';ctx.font='600 13px system-ui';ctx.fillText(clipText(ctx,currentMission,410),48,258);uploadLiveTexture(item);return item.texture}
-function paintExecutiveScreen(t){const item=getLiveTexture('exec'),done=tasks.filter(x=>x.status==='done').length,total=Math.max(tasks.length,1),pct=Math.round(done/total*100),sig=[currentMission,missionPhase,pct,approval,qaSummary].join('|');if(item.sig===sig&&t-item.last<450)return item.texture;item.sig=sig;item.last=t;const ctx=item.ctx,c=item.canvas;ctx.clearRect(0,0,c.width,c.height);const g=ctx.createLinearGradient(0,0,512,288);g.addColorStop(0,'#17112d');g.addColorStop(1,'#0b1c28');ctx.fillStyle=g;ctx.fillRect(0,0,512,288);ctx.fillStyle='#8a6dff';ctx.fillRect(0,0,512,8);ctx.fillStyle='#f7f4ff';ctx.font='800 25px system-ui';ctx.fillText('ROZNEX · CEO COMMAND',34,50);ctx.font='700 14px system-ui';ctx.fillStyle='#ad9cf7';ctx.fillText(missionPhase.toUpperCase(),34,82);ctx.font='600 17px system-ui';ctx.fillStyle='#e8eef5';ctx.fillText(clipText(ctx,currentMission,440),34,122);ctx.fillStyle='#222c3c';ctx.fillRect(34,157,444,18);ctx.fillStyle='#68e0a1';ctx.fillRect(34,157,444*pct/100,18);ctx.fillStyle='#b7c3d0';ctx.font='700 15px system-ui';ctx.fillText(`${pct}% COMPLETE · ${done}/${tasks.length||0} TASKS`,34,205);ctx.fillStyle=approval==='pending'?'#ffd66e':'#75e6a3';ctx.fillText(approval==='pending'?'CEO REVIEW REQUIRED':'APPROVAL GATES SAFE',34,238);ctx.fillStyle='#73879a';ctx.font='600 12px system-ui';ctx.fillText(qaSummary?clipText(ctx,qaSummary,440):'QA gate armed',34,266);uploadLiveTexture(item);return item.texture}
+function screenRoleLine(a){
+ if(a.name==='NEX')return `درخواست ادغام ${githubSnapshot.prs.length} · مسئله ${githubSnapshot.issues.length}`;
+ if(a.name==='LUNA')return 'سیستم طراحی · جریان رابط';
+ if(a.name==='ATLAS')return qaSummary?'کنترل کیفیت · '+qaSummary:'کنترل کیفیت · آماده';
+ if(a.name==='ORION')return 'پژوهش · منابع · ریسک‌ها';
+ if(a.name==='MIRA')return 'رشد · سئو · انتشار';
+ if(a.name==='ARIA')return 'ماموریت · تحویل کار · تاییدها';
+ return a.specialty||a.role||'متخصص'
+}
+function paintAgentScreen(a,t){const item=getLiveTexture('agent:'+a.name),task=tasks.find(x=>x.agent===a.name),sig=[a.status,a.task,task&&task.status,currentMission,qaSummary,graphicsQuality].join('|');const interval=graphicsQuality==='eco'?1000:graphicsQuality==='balanced'?650:350;if(item.sig===sig&&t-item.last<interval)return item.texture;item.sig=sig;item.last=t;const c=item.canvas,ctx=item.ctx;const accent=a.color||'#6f5ae8';ctx.clearRect(0,0,c.width,c.height);const g=ctx.createLinearGradient(0,0,c.width,c.height);g.addColorStop(0,'#09131c');g.addColorStop(1,'#111e28');ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle=accent;ctx.fillRect(0,0,10,c.height);ctx.fillStyle='rgba(255,255,255,.07)';ctx.fillRect(30,28,452,54);ctx.font='700 29px system-ui';ctx.fillStyle='#f6fbff';ctx.fillText(faAgentName(a.name),48,64);ctx.font='600 16px system-ui';ctx.fillStyle='#91a7b8';ctx.fillText(a.role,48,105);ctx.textAlign='right';ctx.fillStyle=a.status==='working'?'#66e5a2':a.status==='meeting'?'#72d8ff':(a.status==='waiting'||a.status==='waitingdep')?'#ffd46a':'#91a7b8';ctx.font='800 15px system-ui';ctx.fillText(faStatus(statusText(a.status)),465,62);ctx.textAlign='left';ctx.font='700 14px ui-monospace,monospace';ctx.fillStyle='#74dcff';ctx.fillText(screenRoleLine(a),48,142);ctx.font='500 17px system-ui';ctx.fillStyle='#d5e1e9';const line=clipText(ctx,(task&&task.task)||a.task||'Ready for a mission',410);ctx.fillText(line,48,181);const progVal=task?(task.status==='done'?1:task.status==='working'?.66:.18):(a.status==='working'?.58:a.status==='meeting'?.42:.08);ctx.fillStyle='#1c2b36';ctx.fillRect(48,213,416,14);ctx.fillStyle=accent;ctx.fillRect(48,213,416*progVal,14);ctx.fillStyle='#718595';ctx.font='600 13px system-ui';ctx.fillText(clipText(ctx,currentMission,410),48,258);uploadLiveTexture(item);return item.texture}
+function paintExecutiveScreen(t){const item=getLiveTexture('exec'),done=tasks.filter(x=>x.status==='done').length,total=Math.max(tasks.length,1),pct=Math.round(done/total*100),sig=[currentMission,missionPhase,pct,approval,qaSummary].join('|');if(item.sig===sig&&t-item.last<450)return item.texture;item.sig=sig;item.last=t;const ctx=item.ctx,c=item.canvas;ctx.clearRect(0,0,c.width,c.height);const g=ctx.createLinearGradient(0,0,512,288);g.addColorStop(0,'#17112d');g.addColorStop(1,'#0b1c28');ctx.fillStyle=g;ctx.fillRect(0,0,512,288);ctx.fillStyle='#8a6dff';ctx.fillRect(0,0,512,8);ctx.fillStyle='#f7f4ff';ctx.font='800 25px system-ui';ctx.fillText('ROZNEX · مرکز فرمان مدیرعامل',34,50);ctx.font='700 14px system-ui';ctx.fillStyle='#ad9cf7';ctx.fillText(faStatus(missionPhase),34,82);ctx.font='600 17px system-ui';ctx.fillStyle='#e8eef5';ctx.fillText(clipText(ctx,currentMission,440),34,122);ctx.fillStyle='#222c3c';ctx.fillRect(34,157,444,18);ctx.fillStyle='#68e0a1';ctx.fillRect(34,157,444*pct/100,18);ctx.fillStyle='#b7c3d0';ctx.font='700 15px system-ui';ctx.fillText(`${pct}% تکمیل · ${done}/${tasks.length||0} کار`,34,205);ctx.fillStyle=approval==='pending'?'#ffd66e':'#75e6a3';ctx.fillText(approval==='pending'?'نیازمند بررسی مدیرعامل':'تاییدهای حساس امن است',34,238);ctx.fillStyle='#73879a';ctx.font='600 12px system-ui';ctx.fillText(qaSummary?clipText(ctx,qaSummary,440):'QA gate armed',34,266);uploadLiveTexture(item);return item.texture}
 
 const CORE_APPEARANCE={
  ARIA:{skin:'#c98f75',hair:'#302039',hairStyle:'bun',jacket:'#8357f3',shirt:'#f7f2ff',pants:'#353447',shoes:'#252733',eye:'#34263d',glasses:false,accent:'#d8b56a'},
@@ -260,18 +340,20 @@ const CUSTOM_HAIRS=['#241e22','#3a2a25','#553342','#202b34','#6a4937'];
 const CUSTOM_STYLES=['short','bun','wave','bob','curly','fade'];
 function hashName(v){let h=2166136261;for(const ch of String(v||'')){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 function ensureAppearance(a){if(a.appearance)return a.appearance;const core=CORE_APPEARANCE[a.name];if(core){a.appearance={...core};return a.appearance}const h=hashName(a.name),j=a.color||['#35c7b2','#ff856d','#a778f5','#e1b34a','#6da0ff','#e26fa7'][h%6];a.appearance={skin:CUSTOM_SKINS[h%CUSTOM_SKINS.length],hair:CUSTOM_HAIRS[(h>>3)%CUSTOM_HAIRS.length],hairStyle:CUSTOM_STYLES[(h>>6)%CUSTOM_STYLES.length],jacket:j,shirt:'#f4f6f8',pants:'#343a46',shoes:'#242932',eye:'#263442',glasses:((h>>9)&1)===1,accent:j};return a.appearance}
+function faAgentName(n){return ({ARIA:'آریا',NEX:'نکس',LUNA:'لونا',ORION:'اوریون',MIRA:'میرا',ATLAS:'اطلس',CEO:'مدیرعامل'})[n]||n}
+function faStatus(v){const s=String(v||'');const m={idle:'آماده',ready:'آماده',working:'در حال کار',waiting:'منتظر',waitingdep:'منتظر وابستگی',queued:'در صف',meeting:'در جلسه',done:'انجام‌شده',completed:'تکمیل‌شده',approved:'تاییدشده',rejected:'ردشده',pending:'در انتظار',running:'در حال اجرا',blocked:'مسدود',safe:'امن',live:'زنده',open:'باز',draft:'پیش‌نویس',default:'پیش‌فرض',active:'فعال'};return m[s.toLowerCase()]||s}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
 function normAngle(v){while(v>Math.PI)v-=Math.PI*2;while(v<-Math.PI)v+=Math.PI*2;return v}function socialLookFor(a){if(activeHandoff){const from=agents.find(x=>x.name===activeHandoff.from),to=agents.find(x=>x.name===activeHandoff.to);if(from&&to){if(a.name===from.name)return{label:to.name,pos:to.pos};if(a.name===to.name)return{label:from.name,pos:from.pos}}}if(dispatchTargetName){const target=agents.find(x=>x.name===dispatchTargetName),aria=agents.find(x=>x.name==='ARIA');if(a.name==='ARIA'&&target)return{label:target.name,pos:target.pos};if(a.name===dispatchTargetName&&aria)return{label:'ARIA',pos:aria.pos}}if(a.status==='meeting'){const speaker=agents.find(x=>x.name===meetingSpeaker);if(speaker&&speaker!==a)return{label:speaker.name,pos:speaker.pos};if(a.name===meetingSpeaker)return{label:'TEAM',pos:[0,0,-.15]}}if(cameraMode==='first'&&a===selected&&distanceTo(a)<4.8)return{label:'CEO',pos:[camera.x,0,camera.z]};return null}
 function drawHair(base,headY,heading,pose,ap){const hy=heading+pose.headYaw,h=ap.hair;boxE(localP(base,0,headY+.29,-.015,heading),[.36,.095,.33],h,pose.headPitch,hy,0);if(ap.hairStyle==='short'){boxE(localP(base,0,headY+.21,-.16,heading),[.35,.12,.18],h,0,hy,0)}else if(ap.hairStyle==='bun'){boxE(localP(base,0,headY+.34,-.23,heading),[.24,.20,.22],h,0,hy,0);boxE(localP(base,0,headY+.48,-.16,heading),[.15,.15,.15],h,0,hy,0);boxE(localP(base,-.33,headY+.04,-.03,heading),[.055,.20,.25],h,0,hy,.08);boxE(localP(base,.33,headY+.04,-.03,heading),[.055,.20,.25],h,0,hy,-.08)}else if(ap.hairStyle==='wave'){boxE(localP(base,-.34,headY-.03,-.05,heading),[.07,.31,.27],h,.08,hy,.12);boxE(localP(base,.34,headY-.03,-.05,heading),[.07,.31,.27],h,-.08,hy,-.12);boxE(localP(base,0,headY+.19,-.20,heading),[.34,.18,.16],h,0,hy,0)}else if(ap.hairStyle==='bob'){boxE(localP(base,-.34,headY-.04,-.02,heading),[.065,.28,.28],h,0,hy,.06);boxE(localP(base,.34,headY-.04,-.02,heading),[.065,.28,.28],h,0,hy,-.06);boxE(localP(base,0,headY+.08,-.29,heading),[.34,.30,.08],h,0,hy,0)}else if(ap.hairStyle==='curly'){for(const [x,y,z] of [[-.24,.30,-.13],[0,.38,-.14],[.24,.30,-.13],[-.31,.12,-.08],[.31,.12,-.08],[0,.20,-.28]])boxE(localP(base,x,headY+y,z,heading),[.13,.13,.13],h,0,hy,0)}else if(ap.hairStyle==='fade'){boxE(localP(base,0,headY+.30,-.05,heading),[.31,.10,.28],h,0,hy,0);boxE(localP(base,0,headY+.18,-.19,heading),[.27,.10,.13],h,0,hy,0)}}
 function drawGlasses(base,headY,heading,pose,ap){if(!ap.glasses)return;const hy=heading+pose.headYaw;boxE(localP(base,-.13,headY+.035,.337,heading),[.105,.065,.012],'#202631',0,hy,0);boxE(localP(base,.13,headY+.035,.337,heading),[.105,.065,.012],'#202631',0,hy,0);boxE(localP(base,0,headY+.035,.345,heading),[.035,.012,.01],'#202631',0,hy,0)}
 function drawCEOAvatar(t){const a={name:'CEO',home:[-7.0,0,6.15],pos:[-7.0,0,6.15],facing:Math.PI,status:'idle',moving:false,appearance:CEO_APPEARANCE,color:CEO_APPEARANCE.accent,rig:{current:'idle',target:'idle',clipStart:t-1000,blendStart:t-1000,from:poseBase(),last:poseBase(),blend:1}};drawCharacter(a,t,false,true);boxE([-7.0,.08,6.15],[.55,.025,.55],'#9a7cff',0,0,0)}
 let agents=[
- {name:'ARIA',role:'Chief of Staff',emoji:'🧠',color:'#8357f3',home:[0,0,-4.0],pos:[0,0,-4.0],target:[0,0,-4.0],status:'idle',task:'آماده دریافت مأموریت',moving:false,animClip:'idle'},
- {name:'NEX',role:'Lead Engineer',emoji:'💻',color:'#28c6e3',home:[-6,0,-1.4],pos:[-6,0,-1.4],target:[-6,0,-1.4],status:'idle',task:'آماده توسعه',moving:false,animClip:'idle'},
- {name:'LUNA',role:'UI/UX Designer',emoji:'🎨',color:'#ed6fb0',home:[6,0,-1.4],pos:[6,0,-1.4],target:[6,0,-1.4],status:'idle',task:'آماده طراحی',moving:false,animClip:'idle'},
- {name:'ORION',role:'Researcher',emoji:'🔎',color:'#8dd247',home:[-5.7,0,-5.9],pos:[-5.7,0,-5.9],target:[-5.7,0,-5.9],status:'idle',task:'آماده تحقیق',moving:false,animClip:'idle'},
- {name:'MIRA',role:'Growth & SEO',emoji:'📣',color:'#f0b947',home:[5.4,0,-5.9],pos:[5.4,0,-5.9],target:[5.4,0,-5.9],status:'idle',task:'آماده رشد',moving:false,animClip:'idle'},
- {name:'ATLAS',role:'QA Engineer',emoji:'🧪',color:'#5e8df3',home:[8.3,0,-4.1],pos:[8.3,0,-4.1],target:[8.3,0,-4.1],status:'idle',task:'آماده تست',moving:false,animClip:'idle'}
+ {name:'ARIA',role:'مدیر هماهنگی و دفتر',emoji:'🧠',color:'#8357f3',home:[0,0,-4.0],pos:[0,0,-4.0],target:[0,0,-4.0],status:'idle',task:'آماده دریافت مأموریت',moving:false,animClip:'idle'},
+ {name:'NEX',role:'مهندس ارشد نرم‌افزار',emoji:'💻',color:'#28c6e3',home:[-6,0,-1.4],pos:[-6,0,-1.4],target:[-6,0,-1.4],status:'idle',task:'آماده توسعه',moving:false,animClip:'idle'},
+ {name:'LUNA',role:'طراح رابط و تجربه کاربری',emoji:'🎨',color:'#ed6fb0',home:[6,0,-1.4],pos:[6,0,-1.4],target:[6,0,-1.4],status:'idle',task:'آماده طراحی',moving:false,animClip:'idle'},
+ {name:'ORION',role:'پژوهشگر و تحلیل‌گر',emoji:'🔎',color:'#8dd247',home:[-5.7,0,-5.9],pos:[-5.7,0,-5.9],target:[-5.7,0,-5.9],status:'idle',task:'آماده تحقیق',moving:false,animClip:'idle'},
+ {name:'MIRA',role:'رشد و سئو',emoji:'📣',color:'#f0b947',home:[5.4,0,-5.9],pos:[5.4,0,-5.9],target:[5.4,0,-5.9],status:'idle',task:'آماده رشد',moving:false,animClip:'idle'},
+ {name:'ATLAS',role:'کنترل کیفیت',emoji:'🧪',color:'#5e8df3',home:[8.3,0,-4.1],pos:[8.3,0,-4.1],target:[8.3,0,-4.1],status:'idle',task:'آماده تست',moving:false,animClip:'idle'}
 ];
 let selected=agents[0], tasks=[], currentMission='دفتر مجازی سه‌بعدی Roznex', report='', approval='none', executing=false;
 let missionPhase='Ready', meetingActive=false, meetingAgenda=[], meetingNotes=[], qaSummary='', worldMonitorEls=[], meetingSpeaker='ARIA';
@@ -650,6 +732,116 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
   });
   const mo=new MutationObserver(sync);mo.observe(document.body,{attributes:true,attributeFilter:['class']});
   sync();
+})();
+</script>
+<script id="ROZNEX_FA_UI_V22_JS">
+(()=>{
+ const AG={ARIA:'آریا',NEX:'نکس',LUNA:'لونا',ORION:'اوریون',MIRA:'میرا',ATLAS:'اطلس',CEO:'مدیرعامل'};
+ const exact={
+ 'AI Company OS · PRODUCTION CLIENT PIPELINE':'سیستم‌عامل شرکت هوش مصنوعی',
+ 'Join voice':'گفت‌وگوی صوتی','Share screen':'اشتراک صفحه','Issues':'مسائل','PRs':'درخواست‌های ادغام','Services':'سرویس‌ها','Queue':'صف کار','Approvals':'تاییدها','CEO View':'نمای مدیرعامل','System':'سامانه','Graphics High':'گرافیک بالا','Graphics Balanced':'گرافیک متعادل','Graphics Eco':'گرافیک اقتصادی','Workspace':'فضای کار','Team Meeting':'جلسه تیم','Relations':'روابط کاری','Economy':'اقتصاد شرکت','Clients':'مشتری‌ها','Memory':'حافظه','Hire Agent':'استخدام کارمند','New mission':'ماموریت جدید',
+ 'MISSION COMMAND':'فرمان ماموریت','READY':'آماده','QA ARMED':'کنترل کیفیت آماده','CEO Approval required':'نیازمند تایید مدیرعامل','Chief of Staff':'مدیر هماهنگی و دفتر','Lead Engineer':'مهندس ارشد نرم‌افزار','UI/UX Designer':'طراح رابط و تجربه کاربری','Researcher':'پژوهشگر و تحلیل‌گر','Growth & SEO':'رشد و سئو','QA Engineer':'کنترل کیفیت',
+ 'Idle':'آماده','Working':'در حال کار','Waiting':'منتظر','Queued':'در صف','Meeting':'در جلسه','Done':'انجام‌شده',
+ 'EXECUTIVE COMMAND DESK':'میز فرمان مدیرعامل','ROZNEX HQ · CEO Console':'ROZNEX · پنل مدیرعامل','TEAM':'تیم','DONE':'تکمیل','GATES':'تاییدهای حساس','SAFE':'امن','CURRENT MISSION':'ماموریت فعلی','Ready for your next mission':'آماده دریافت ماموریت بعدی','Brief Team':'جلسه کوتاه تیم','CEO Review':'بررسی مدیرعامل','Focus Mode':'حالت تمرکز','FOCUS':'تمرکز',
+ 'FIRST PERSON':'نمای اول‌شخص','You · Agents · Mission':'مدیرعامل · کارمندها · ماموریت',
+ 'AGENT WORKSPACE':'فضای کار کارمند','Overview':'نمای کلی','Tasks':'کارها','Files':'فایل‌ها','Activity':'فعالیت‌ها','Integrations':'اتصال‌ها','LIVE':'زنده',
+ 'LIVE TEAM BRIEFING':'جلسه زنده تیم','Roznex Meeting Room':'اتاق جلسه ROZNEX','Agenda':'دستور جلسه','Live notes':'یادداشت‌های زنده','Start briefing':'شروع جلسه','Return to desks':'بازگشت به میزها',
+ 'ROZNEX OPERATIONS':'عملیات ROZNEX','GitHub Operations':'عملیات گیت‌هاب','Read-only snapshot · write actions require CEO approval':'نمایش ذخیره‌شده؛ نوشتن واقعی نیازمند تایید مدیرعامل است','VERIFIED':'بررسی‌شده','Services':'سرویس‌ها','System Health':'سلامت سامانه',
+ 'State saved':'وضعیت ذخیره شد','PRODUCTION client runtime':'اجرای محلی رایگان','RIG · IDLE':'حرکت · آماده','LOOK · FORWARD':'نگاه · روبه‌رو',
+ 'SELF-ORGANIZING WORK GRAPH':'نمودار خودسازمان‌دهی کار','Autonomous Workload, Capacity & Dependency Graph':'ظرفیت، وابستگی و توزیع خودکار کار','Dependency Map':'نقشه وابستگی','Auto-organize':'مرتب‌سازی خودکار','Refresh graph':'به‌روزرسانی نمودار','Focus blocked':'نمایش مسدودها',
+ 'RELATIONS':'روابط','WAITING':'منتظر','RUNNING NOW':'در حال اجرا','PARALLEL CAPACITY':'ظرفیت هم‌زمان','HELP REQUESTS':'درخواست کمک','ARIA ESCALATIONS':'ارجاع‌های آریا','SUBTASKS':'زیرکارها','DEADLINE RISK':'ریسک مهلت','TEAM LOAD':'بار تیم','TEMP HELPERS':'نیروی کمکی',
+ 'Agent capacity & deadline':'ظرفیت کارمندها و مهلت','Self-created subtasks':'زیرکارهای ساخته‌شده','COO interventions':'مداخله‌های مدیریتی','Live branching task graph':'نمودار زنده شاخه‌های کار','Parallel scheduler':'زمان‌بندی موازی','Help queue':'صف کمک','Handoff timeline':'روند تحویل کار',
+ 'COMPANY ECONOMY & PERFORMANCE':'اقتصاد و عملکرد شرکت','Mission Economics · KPI · Capacity Forecast':'اقتصاد ماموریت، شاخص‌ها و پیش‌بینی ظرفیت','Executive forecast':'پیش‌بینی مدیریتی','Recalculate':'محاسبه دوباره',
+ 'Open pull requests':'درخواست‌های ادغام باز','Open issues':'مسائل باز','Branches':'شاخه‌ها','Mission Queue':'صف ماموریت','Client runtime':'وضعیت اجرای برنامه','Safety gates':'کنترل‌های امنیتی','Read-only external data':'داده بیرونی فقط خواندنی','Sensitive actions':'اقدام‌های حساس','CEO approval required':'نیازمند تایید مدیرعامل','Local fallback':'حالت محلی پشتیبان',
+ 'OPEN':'باز','DRAFT':'پیش‌نویس','default branch':'شاخه اصلی','feature / release branch':'شاخه توسعه / انتشار','default':'اصلی','active':'فعال',
+ 'PROJECTED COST':'هزینه پیش‌بینی‌شده','CRITICAL PATH':'مسیر بحرانی','TEAM EFFICIENCY':'بهره‌وری تیم','FORECAST CONFIDENCE':'اطمینان پیش‌بینی','BOTTLENECK':'گلوگاه',
+ 'OPEN LEADS':'سرنخ‌های باز','PIPELINE VALUE':'ارزش مسیر فروش','AVG WIN PROB.':'میانگین احتمال موفقیت','ZERO-COST READINESS':'آمادگی نسخه رایگان',
+ 'Client intake':'ثبت مشتری','Pipeline':'مسیر فروش','PROPOSAL PREVIEW':'پیش‌نمایش پیشنهاد','Select or create a lead':'یک مشتری را انتخاب یا ایجاد کن','CEO approval required':'نیازمند تایید مدیرعامل',
+ 'Focus Mode':'حالت تمرکز','Command':'فرمان','Meeting':'جلسه','Clients':'مشتری‌ها',
+ 'Mouse':'ماوس','CEO View':'نمای مدیرعامل','Workspace':'فضای کار','Relations':'روابط','Economy':'اقتصاد','Auto-organize':'مرتب‌سازی خودکار'
+ };
+ const phrases=[
+  ['ARIA is ready to brief the team.','آریا آماده هماهنگی تیم است.'],
+  ['Social office ready','دفتر آماده همکاری است'],
+  ['Team alignment in progress','هماهنگی تیم در حال انجام است'],
+  ['Click an agent or walk to their desk','روی کارمند کلیک کن یا به میز او برو'],
+  ['WebGL office renderer online','نمای سه‌بعدی دفتر فعال است'],
+  ['Agent runtime linked','سامانه کارمندها فعال است'],
+  ['Approval gate armed','کنترل تایید مدیرعامل فعال است'],
+  ['waiting_for_mission','منتظر_ماموریت'],
+  ['Mission Control','کنترل ماموریت'],
+  ['workspace','فضای کار'],
+  ['Mission Briefing','گزارش ماموریت'],
+  ['Chief of Staff','مدیر هماهنگی و دفتر'],
+  ['Lead Engineer','مهندس ارشد نرم‌افزار'],
+  ['UI/UX Designer','طراح رابط و تجربه کاربری'],
+  ['Researcher','پژوهشگر و تحلیل‌گر'],
+  ['Growth & SEO','رشد و سئو'],
+  ['QA Engineer','کنترل کیفیت']
+ ];
+ function trText(s){
+   let t=s;
+   const z=t.trim();
+   if(exact[z]) return t.replace(z,exact[z]);
+   for(const [a,b] of Object.entries(AG)) t=t.replace(new RegExp('\\b'+a+'\\b','g'),b);
+   for(const [a,b] of phrases) t=t.split(a).join(b);
+   return t;
+ }
+ function walk(root){
+   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+   const arr=[];while(w.nextNode())arr.push(w.currentNode);
+   for(const n of arr){
+     const p=n.parentElement;if(!p||['SCRIPT','STYLE','TEXTAREA','INPUT','OPTION','CODE'].includes(p.tagName))continue;
+     const v=trText(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;
+   }
+   root.querySelectorAll?.('[placeholder]').forEach(el=>{
+     const p=el.getAttribute('placeholder')||'';
+     const m={
+      'دستور بنویس… مثلاً: برو کنار NEX، CEO view، ماموریت جدید':'دستور بنویس… مثلاً: برو کنار نکس، نمای مدیرعامل، ماموریت جدید',
+      'با این کارمند صحبت کن…':'با این کارمند صحبت کن…'
+     }; if(m[p])el.setAttribute('placeholder',m[p]);
+   });
+ }
+ function installMore(){
+   const tools=document.querySelector('.toolbar .tools'); if(!tools||document.getElementById('moreMenuBtn'))return;
+   const changes=document.createElement('button');changes.className='tool';changes.id='changesTool';changes.innerHTML='<span class="ico">↔</span><span>تغییرات واقعی</span>';
+   const more=document.createElement('button');more.className='tool';more.id='moreMenuBtn';more.innerHTML='<span class="ico">•••</span><span>بیشتر</span>';
+   tools.append(changes,more);
+   const tray=document.createElement('div');tray.className='moreTray';tray.id='moreTray';
+   const items=[['voiceBtn','گفت‌وگوی صوتی'],['screenBtn','اشتراک صفحه'],['issueTool','مسائل'],['prTool','درخواست‌های ادغام'],['servicesTool','سرویس‌ها'],['queueTool','صف کار'],['approvalTool','تاییدها'],['healthTool','سلامت سامانه'],['graphicsTool','تنظیم گرافیک'],['relationTool','روابط کاری'],['economyTool','اقتصاد شرکت'],['memoryTool','حافظه'],['hireTool','استخدام کارمند']];
+   tray.innerHTML=items.map(x=>'<button data-target="'+x[0]+'">'+x[1]+'</button>').join('');
+   document.getElementById('app').appendChild(tray);
+   more.onclick=e=>{e.stopPropagation();tray.classList.toggle('show')};
+   tray.onclick=e=>{const b=e.target.closest('button[data-target]');if(!b)return;document.getElementById(b.dataset.target)?.click();tray.classList.remove('show')};
+   document.addEventListener('click',e=>{if(!tray.contains(e.target)&&e.target!==more)tray.classList.remove('show')});
+   changes.onclick=()=>{document.getElementById('realChangesModal')?.classList.add('show');if(document.pointerLockElement)document.exitPointerLock()};
+ }
+ function installRealChanges(){
+   const modal=document.getElementById('realChangesModal'); if(!modal)return;
+   const input=document.getElementById('realBranchInput');
+   const saved=localStorage.getItem('roznex-real-branch')||''; if(input)input.value=saved;
+   document.getElementById('realChangesClose').onclick=()=>modal.classList.remove('show');
+   modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show')});
+   document.getElementById('saveRealBranch').onclick=()=>{const v=(input?.value||'').trim();if(!v)return toast?.('نام شاخه را وارد کن');localStorage.setItem('roznex-real-branch',v);toast?.('نام شاخه ذخیره شد')};
+   document.getElementById('openRealRepo').onclick=()=>window.open('https://github.com/RozhanB01/roznex','_blank','noopener');
+   document.getElementById('previewRealChanges').onclick=()=>{
+     const b=(input?.value||localStorage.getItem('roznex-real-branch')||'').trim();
+     if(!b){toast?.('هنوز شاخه واقعی برای پیش‌نمایش ثبت نشده است');return}
+     window.open('https://github.com/RozhanB01/roznex/compare/main...'+encodeURIComponent(b),'_blank','noopener');
+   };
+ }
+ function staticPolish(){
+   const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t};
+   set('agentName',AG[document.getElementById('agentName')?.textContent]||document.getElementById('agentName')?.textContent||'آریا');
+   set('terminalAgent','آریا · مدیر هماهنگی و دفتر');
+   const tl=document.getElementById('terminalLines');if(tl)tl.innerHTML='✓ نمای سه‌بعدی دفتر فعال است<br>✓ سامانه کارمندها فعال است<br>✓ کنترل تایید مدیرعامل فعال است<br>› روی کارمند کلیک کن یا به میز او برو';
+   const tt=document.getElementById('terminalTask');if(tt&&tt.textContent.includes('waiting_for_mission'))tt.textContent='$ منتظر_ماموریت';
+   const brandSub=document.querySelector('.brandText span');if(brandSub)brandSub.textContent='سیستم‌عامل شرکت هوش مصنوعی';
+   const q=document.querySelector('.qualityRing');if(q){q.querySelector('b')&&(q.querySelector('b').textContent='مسیر مشتری و پروژه');q.querySelector('span')&&(q.querySelector('span').textContent='مشتری · پیشنهاد · هزینه · زمان · ظرفیت · تایید مدیرعامل')}
+ }
+ installMore();installRealChanges();staticPolish();walk(document.body);
+ const mo=new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1)walk(n);else if(n.nodeType===3&&n.parentElement)walk(n.parentElement)});
+ mo.observe(document.body,{childList:true,subtree:true,characterData:false});
 })();
 </script>
 </body></html>
