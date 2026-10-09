@@ -67,6 +67,71 @@
 /* PRODUCTION client pipeline */
 .salesShell{width:min(1100px,94vw)}.salesTop{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}.salesMetric{padding:11px;border-radius:13px;background:#111923;border:1px solid rgba(255,255,255,.08)}.salesMetric span{display:block;font-size:6px;color:#8d99a8;letter-spacing:.08em}.salesMetric b{display:block;font-size:15px;margin-top:4px}.salesLayout{display:grid;grid-template-columns:1.05fr 1.45fr;gap:10px}.salesForm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.salesForm label{font-size:7px;color:#8f9aa7;display:flex;flex-direction:column;gap:4px}.salesForm input,.salesForm select,.salesForm textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.1);background:#111923;color:#fff;border-radius:9px;padding:9px;font:inherit}.salesForm textarea{min-height:86px;resize:vertical;grid-column:1/-1}.salesForm .full{grid-column:1/-1}.salesActions{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}.salesActions button{border:1px solid rgba(255,255,255,.12);background:#17212c;color:#fff;border-radius:10px;padding:9px 11px;font-size:7px;font-weight:900;cursor:pointer}.salesActions button.primary{background:#6e57e8}.salesActions button.win{background:#168b6b}.pipeline{display:grid;gap:7px}.leadCard{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px;border:1px solid rgba(255,255,255,.08);background:#111923;border-radius:12px;cursor:pointer}.leadCard.active{outline:1px solid #7c66eb;background:#151b29}.leadCard b{font-size:9px}.leadCard p{font-size:7px;color:#8c99a8;margin:4px 0 0}.leadStage{font-size:6px;font-weight:900;padding:5px 7px;border-radius:999px;background:#263240;height:max-content}.leadStage.won{background:#155b49}.leadStage.proposal{background:#5746a5}.proposalBox{min-height:250px;padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:linear-gradient(145deg,#101823,#11131b)}.proposalBox h3{margin:0 0 7px}.proposalHero{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07)}.proposalHero b{font-size:14px}.proposalHero span{font-size:7px;color:#8d9aaa}.proposalGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.proposalStat{padding:9px;border-radius:10px;background:#17212c}.proposalStat span{display:block;font-size:6px;color:#83909d}.proposalStat b{display:block;font-size:10px;margin-top:3px}.proposalText{font-size:8px;line-height:1.7;color:#c3ccd5;margin-top:10px}.deliverables{display:grid;gap:5px;margin-top:10px}.deliverables div{padding:7px 8px;border-radius:9px;background:#141e29;font-size:7px}.prodReadiness{margin-top:10px;padding:10px;border-radius:12px;background:#111923;border:1px solid rgba(255,255,255,.08)}.readinessBar{height:6px;background:#1d2834;border-radius:20px;overflow:hidden;margin-top:7px}.readinessBar i{display:block;height:100%;background:linear-gradient(90deg,#68d9a5,#7a63ec);border-radius:20px}.readinessList{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}.readinessList div{font-size:6px;color:#9aa6b3}.readinessList b{color:#dfe7ee}@media(max-width:760px){.salesTop{grid-template-columns:1fr 1fr}.salesLayout{grid-template-columns:1fr}.salesForm{grid-template-columns:1fr}.salesForm textarea,.salesForm .full{grid-column:auto}.proposalGrid{grid-template-columns:1fr 1fr}}
 </style>
+<style id="ROZNEX_VISUAL_CLARITY_V21">
+/* ROZNEX_VISUAL_CLARITY_V21 */
+.viewDeck{position:absolute;z-index:175;left:50%;top:80px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:6px;border-radius:14px;background:rgba(9,13,18,.76);border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 35px rgba(0,0,0,.24);backdrop-filter:blur(16px);direction:rtl}
+.viewDeck button{height:31px;border:1px solid rgba(255,255,255,.13);border-radius:9px;background:rgba(255,255,255,.08);color:#f4f7fb;padding:0 10px;font:800 8px/1 system-ui;cursor:pointer;white-space:nowrap;transition:.18s}
+.viewDeck button:hover{background:rgba(255,255,255,.15);transform:translateY(-1px)}
+.viewDeck button.active{background:#7359ec;border-color:#9b8bf4}
+.viewDeck .viewTip{padding:0 7px;font:700 7px/1 system-ui;color:#9ba8b6;white-space:nowrap}
+body.ceoMode .toolbar{top:8px;height:50px;border-width:2px;box-shadow:0 3px 0 #0a0b0d;background:rgba(250,250,248,.88)}
+body.ceoMode .toolbar .tool:not(#ceoViewBtn):not(#workspaceTopBtn):not(#missionOpen){display:none}
+body.ceoMode .toolbar .tools{justify-content:flex-end;overflow:visible}
+body.ceoMode .missionPanel,
+body.ceoMode .sidePanel,
+body.ceoMode .activity,
+body.ceoMode .executiveHud,
+body.ceoMode .meetingDock,
+body.ceoMode .socialTicker,
+body.ceoMode .qualityRing,
+body.ceoMode .laptopWrap,
+body.ceoMode .hand,
+body.ceoMode .bottomHint,
+body.ceoMode .focusToggle{opacity:0!important;pointer-events:none!important}
+body.ceoMode .miniMap{display:block!important;width:310px;left:18px;bottom:18px;padding:10px;background:rgba(8,12,17,.78)}
+body.ceoMode .miniMapBody{height:148px}
+body.ceoMode .agentTag{filter:drop-shadow(0 7px 10px rgba(0,0,0,.18))}
+body.ceoMode .agentTag button{min-width:96px;padding:4px 6px;border-width:1px;box-shadow:0 2px 0 rgba(17,21,26,.8);background:rgba(255,255,255,.90)}
+body.ceoMode .agentTag .tagText span{display:none}
+body.ceoMode .agentTag i{font-size:6px;padding:2px 4px}
+body.ceoMode .worldMonitor{opacity:.72}
+body.clarityMode .toolbar,
+body.clarityMode .missionPanel,
+body.clarityMode .sidePanel,
+body.clarityMode .activity,
+body.clarityMode .executiveHud,
+body.clarityMode .meetingDock,
+body.clarityMode .socialTicker,
+body.clarityMode .qualityRing,
+body.clarityMode .systemDock,
+body.clarityMode .bottomHint,
+body.clarityMode .focusToggle,
+body.clarityMode .laptopWrap,
+body.clarityMode .hand,
+body.clarityMode .crosshair{opacity:0!important;pointer-events:none!important}
+body.clarityMode .agentTag{opacity:.72}
+body.clarityMode .worldMonitor{opacity:.38}
+body.clarityMode .miniMap{display:block!important;opacity:.94;width:270px;left:16px;bottom:16px}
+body.clarityMode .viewDeck{opacity:1!important;pointer-events:auto!important}
+body.ceoMode.clarityMode .agentTag{opacity:.9}
+body.ceoMode .vignette{background:radial-gradient(circle at 50% 48%,transparent 67%,rgba(0,0,0,.10) 100%)}
+@media(max-width:900px){
+  .viewDeck{top:67px;max-width:calc(100vw - 18px);padding:5px;gap:4px}
+  .viewDeck button{padding:0 8px;font-size:7px;height:29px}
+  .viewDeck .viewTip{display:none}
+  body.ceoMode .toolbar .brandText{display:none}
+  body.ceoMode .toolbar .tool span:not(.ico){display:none}
+  body.ceoMode .toolbar .tool{width:34px;padding:0;justify-content:center}
+  body.ceoMode .miniMap,body.clarityMode .miniMap{width:190px;display:block!important}
+  body.ceoMode .miniMapBody{height:96px}
+}
+@media(max-width:560px){
+  .viewDeck{top:66px}
+  .viewDeck button{font-size:0;width:34px;padding:0}
+  .viewDeck button::first-letter{font-size:13px}
+  body.ceoMode .agentTag button{min-width:78px}
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -111,7 +176,7 @@
 
   <aside class="executiveHud" id="executiveHud"><div class="execHead"><div><small>EXECUTIVE COMMAND DESK</small><b>ROZNEX HQ · CEO Console</b></div><button id="execClose">×</button></div><div class="execMetrics"><div class="execMetric"><span>TEAM</span><b id="execTeam">6</b></div><div class="execMetric"><span>DONE</span><b id="execDone">0%</b></div><div class="execMetric"><span>GATES</span><b id="execGates">SAFE</b></div></div><div class="execMission"><small>CURRENT MISSION</small><b id="execMissionTitle">Ready for your next mission</b><div class="execProgress"><i id="execProgressBar" style="width:0%"></i></div></div><div class="execActions"><button class="primary" id="execMissionBtn">✦ New Mission</button><button id="execMeetingBtn">◉ Brief Team</button><button id="execReviewBtn">✓ CEO Review</button><button id="execRelationsBtn" class="execRelation">⌁ Relations</button><button id="execEconomyBtn">◫ Economy</button><button id="execSalesBtn">◇ Clients</button><button id="execFocusBtn">◎ Focus Mode</button></div><div class="execFeed" id="execFeed"></div></aside>
   <button class="focusToggle" id="focusToggle">◎ FOCUS</button>
-  <div class="bottomHint"><span><kbd>WASD</kbd> حرکت</span><span><kbd>Mouse</kbd> نگاه</span><span><kbd>E</kbd> تعامل</span><span><kbd>M</kbd> مأموریت</span><span><kbd>V</kbd> CEO View</span><span><kbd>F</kbd> Workspace</span><span><kbd>K</kbd> Command</span><span><kbd>R</kbd> Meeting</span><span><kbd>G</kbd> Relations · <kbd>O</kbd> Auto-organize · <kbd>P</kbd> Economy · <kbd>S</kbd> Clients</span><strong id="contextHint">ARIA نزدیک‌ترین کارمند</strong></div>
+  <div class="bottomHint"><span><kbd>WASD</kbd> حرکت</span><span><kbd>Mouse</kbd> نگاه</span><span><kbd>E</kbd> تعامل</span><span><kbd>M</kbd> مأموریت</span><span><kbd>V</kbd> CEO View</span><span><kbd>F</kbd> Workspace</span><span><kbd>K</kbd> Command</span><span><kbd>R</kbd> Meeting</span><span><kbd>G</kbd> Relations · <kbd>O</kbd> Auto-organize · <kbd>P</kbd> Economy · <kbd>B</kbd> Clients</span><strong id="contextHint">ARIA نزدیک‌ترین کارمند</strong></div>
   <div class="mobilePad"><button class="up">▲</button><button class="left">◀</button><button class="right">▶</button><button class="down">▼</button></div>
   <div class="miniMap" id="miniMap"><div class="miniMapHead"><b>ROZNEX HQ</b><span id="viewModeLabel">FIRST PERSON</span></div><div class="miniMapBody" id="miniMapBody"><i class="youDot" id="youDot"></i></div><div class="miniLegend">You · Agents · Mission</div></div>
   <div class="workspaceBack" id="workspaceModal"><section class="workspaceShell"><header class="workspaceHeader"><div><small>AGENT WORKSPACE</small><h2 id="wsTitle">ARIA · Mission Control</h2><p id="wsSubtitle">Chief of Staff workspace</p></div><div class="wsHeaderActions"><span id="wsLive" class="wsLive">● LIVE</span><button id="wsClose">✕</button></div></header><nav class="wsTabs"><button class="active" data-tab="overview">Overview</button><button data-tab="tasks">Tasks</button><button data-tab="files">Files</button><button data-tab="activity">Activity</button><button data-tab="integrations">Integrations</button><button data-tab="memory">Memory</button></nav><div class="wsContent" id="wsContent"></div></section></div>
@@ -230,7 +295,7 @@ function createWorldMonitor(a){const el=document.createElement('div');el.classNa
 for(const a of agents)createWorldMonitor(a)
 
 function resize(){const cap=graphicsQuality==='high'?1.75:graphicsQuality==='balanced'?1.25:1.0,d=Math.min(devicePixelRatio||1,cap),w=Math.floor(innerWidth*d),h=Math.floor(innerHeight*d);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h)}}
-function cameraVP(){if(cameraMode==='cinematic'){const view=M4.lookAt(cinematic.eye,cinematic.target,[0,1,0]);const proj=M4.perspective(55*Math.PI/180,canvas.width/canvas.height,.08,70);return M4.multiply(proj,view)}if(cameraMode==='ceo'){const view=M4.lookAt([0,15.5,8.8],[0,.7,-1.7],[0,1,0]);const proj=M4.perspective(52*Math.PI/180,canvas.width/canvas.height,.08,70);return M4.multiply(proj,view)}const dir=[Math.sin(camera.yaw)*Math.cos(camera.pitch),Math.sin(camera.pitch),Math.cos(camera.yaw)*Math.cos(camera.pitch)];const view=M4.lookAt([camera.x,camera.y,camera.z],[camera.x+dir[0],camera.y+dir[1],camera.z+dir[2]],[0,1,0]);const proj=M4.perspective(65*Math.PI/180,canvas.width/canvas.height,.08,70);return M4.multiply(proj,view)}
+function cameraVP(){if(cameraMode==='cinematic'){const view=M4.lookAt(cinematic.eye,cinematic.target,[0,1,0]);const proj=M4.perspective(55*Math.PI/180,canvas.width/canvas.height,.08,70);return M4.multiply(proj,view)}if(cameraMode==='ceo'){const view=M4.lookAt([0,5.15,8.55],[0,1.0,-1.65],[0,1,0]);const proj=M4.perspective(72*Math.PI/180,canvas.width/canvas.height,.08,70);return M4.multiply(proj,view)}const dir=[Math.sin(camera.yaw)*Math.cos(camera.pitch),Math.sin(camera.pitch),Math.cos(camera.yaw)*Math.cos(camera.pitch)];const view=M4.lookAt([camera.x,camera.y,camera.z],[camera.x+dir[0],camera.y+dir[1],camera.z+dir[2]],[0,1,0]);const proj=M4.perspective(72*Math.PI/180,canvas.width/canvas.height,.08,70);return M4.multiply(proj,view)}
 function renderScene(t){resize();gl.clearColor(.57,.72,.84,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);vp=cameraVP();
  // room shell
  box([0,-.15,0],[11,.15,9],'#e5c78e'); box([0,3.1,-9],[11,3.1,.12],'#edcfaa'); box([-11,3.1,0],[.12,3.1,9],'#e7c49f');box([11,3.1,0],[.12,3.1,9],'#e7c49f');
@@ -518,7 +583,7 @@ const commands=[{ico:'✦',title:'ماموریت جدید',sub:'Open Mission Com
 function renderCommands(q=''){q=q.trim().toLowerCase();const list=commands.filter(c=>!q||(`${c.title} ${c.sub}`).toLowerCase().includes(q));$('#commandResults').innerHTML=list.map((c,i)=>`<div class="cmdItem" data-cmd="${commands.indexOf(c)}"><i>${c.ico}</i><div><b>${c.title}</b><span>${c.sub}</span></div><kbd>Enter</kbd></div>`).join('');document.querySelectorAll('.cmdItem').forEach(el=>el.onclick=()=>{const c=commands[+el.dataset.cmd];closeCommand();c.run()})}
 window.addEventListener('error',e=>{try{$('#healthBadge').textContent='WARN';$('#healthBadge').style.background='#f6c85f';$('#saveStateDot').className='sysDot warn';$('#saveStateText').textContent='Recovered';addActivity('SYSTEM','Recovered runtime error: '+(e.message||'unknown'))}catch(_){}});
 window.addEventListener('unhandledrejection',e=>{try{$('#healthBadge').textContent='WARN';$('#healthBadge').style.background='#f6c85f';addActivity('SYSTEM','Recovered async error')}catch(_){}});
-addEventListener('keydown',e=>{if(e.key==='Escape'){closeCommand();return}if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return;keys[e.key.toLowerCase()]=true;if(e.key.toLowerCase()==='e')interact();if(e.key.toLowerCase()==='m')$('#missionModal').classList.add('show');if(e.key.toLowerCase()==='v')toggleCEOView();if(e.key.toLowerCase()==='f')openWorkspace();if(e.key.toLowerCase()==='k')openCommand();if(e.key.toLowerCase()==='r')openMeeting();if(e.key.toLowerCase()==='g')openRelationshipGraph();if(e.key.toLowerCase()==='o')selfOrganizeTasks('shortcut');if(e.key.toLowerCase()==='p')openEconomy();if(e.key.toLowerCase()==='s')openSales();if(e.key.toLowerCase()==='c')openExecutiveHud()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeCommand();return}if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return;keys[e.key.toLowerCase()]=true;if(e.key.toLowerCase()==='e')interact();if(e.key.toLowerCase()==='m')$('#missionModal').classList.add('show');if(e.key.toLowerCase()==='v')toggleCEOView();if(e.key.toLowerCase()==='f')openWorkspace();if(e.key.toLowerCase()==='k')openCommand();if(e.key.toLowerCase()==='r')openMeeting();if(e.key.toLowerCase()==='g')openRelationshipGraph();if(e.key.toLowerCase()==='o')selfOrganizeTasks('shortcut');if(e.key.toLowerCase()==='p')openEconomy();if(e.key.toLowerCase()==='b')openSales();if(e.key.toLowerCase()==='c')openExecutiveHud()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 canvas.addEventListener('click',()=>{if(cameraMode==='first'&&!pointerLocked&&innerWidth>900&&!$('#workspaceModal').classList.contains('show'))canvas.requestPointerLock();});document.addEventListener('pointerlockchange',()=>{pointerLocked=document.pointerLockElement===canvas;$('#enterBtn').classList.toggle('active',pointerLocked);$('#enterBtn').textContent=pointerLocked?'✓ داخل دفتر · ESC برای خروج':'🎮 ورود به دفتر · Mouse + WASD'});document.addEventListener('mousemove',e=>{if(!pointerLocked)return;camera.yaw-=e.movementX*.0023;camera.pitch-=e.movementY*.0018;camera.pitch=Math.max(-.65,Math.min(.55,camera.pitch))});
 $('#enterBtn').onclick=()=>{if(pointerLocked)document.exitPointerLock();else canvas.requestPointerLock()};
 $('.mobilePad .up').ontouchstart=()=>keys.w=true;$('.mobilePad .up').ontouchend=()=>keys.w=false;$('.mobilePad .down').ontouchstart=()=>keys.s=true;$('.mobilePad .down').ontouchend=()=>keys.s=false;$('.mobilePad .left').ontouchstart=()=>keys.a=true;$('.mobilePad .left').ontouchend=()=>keys.a=false;$('.mobilePad .right').ontouchstart=()=>keys.d=true;$('.mobilePad .right').ontouchend=()=>keys.d=false;
@@ -542,6 +607,35 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
   async function cloudSave(keepalive=false){if(location.protocol==='file:')return;const snap=snapshot();const serialized=JSON.stringify(snap);if(serialized===lastSerialized)return;try{const r=await fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({snapshot:snap,version:'production',deviceId:navigator.userAgent.slice(0,120)}),keepalive});if(r.ok)lastSerialized=serialized;}catch{}}
   async function cloudLoad(){if(location.protocol==='file:')return;try{const r=await fetch('/api/state',{cache:'no-store'});if(!r.ok)return;const d=await r.json();if(d.snapshot&&typeof d.snapshot==='object'&&!sessionStorage.getItem(CLOUD_KEY)){Object.entries(d.snapshot).forEach(([k,v])=>{if(typeof v==='string')localStorage.setItem(k,v)});lastSerialized=JSON.stringify(snapshot());sessionStorage.setItem(CLOUD_KEY,'1');location.reload();}else{lastSerialized=JSON.stringify(snapshot());}}catch{}}
   cloudLoad();setInterval(()=>cloudSave(false),8000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')cloudSave(true)});window.addEventListener('pagehide',()=>cloudSave(true));
+})();
+</script>
+<script id="ROZNEX_VISUAL_CLARITY_V21_JS">
+/* ROZNEX_VISUAL_CLARITY_V21 */
+(()=>{
+  const deck=document.createElement('div');
+  deck.className='viewDeck';
+  deck.innerHTML='<button id="viewOverview" title="نمای کلی شرکت">◈ نمای کل شرکت</button><button id="viewClean" title="مخفی/نمایش کردن پنل‌ها">◎ دید آزاد</button><button id="viewNormal" title="بازگشت به حالت عادی">↺ حالت عادی</button><span class="viewTip">V: نمای کل · H: HUD</span>';
+  document.getElementById('app')?.appendChild(deck);
+  const overview=document.getElementById('viewOverview');
+  const clean=document.getElementById('viewClean');
+  const normal=document.getElementById('viewNormal');
+  const sync=()=>{
+    overview?.classList.toggle('active',document.body.classList.contains('ceoMode'));
+    clean?.classList.toggle('active',document.body.classList.contains('clarityMode'));
+  };
+  overview?.addEventListener('click',()=>{document.getElementById('ceoViewBtn')?.click();setTimeout(sync,0)});
+  clean?.addEventListener('click',()=>{document.body.classList.toggle('clarityMode');sync()});
+  normal?.addEventListener('click',()=>{
+    document.body.classList.remove('clarityMode');
+    if(document.body.classList.contains('ceoMode')) document.getElementById('ceoViewBtn')?.click();
+    sync();
+  });
+  addEventListener('keydown',e=>{
+    if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
+    if(e.key.toLowerCase()==='h'){document.body.classList.toggle('clarityMode');sync()}
+  });
+  const mo=new MutationObserver(sync);mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+  sync();
 })();
 </script>
 </body></html>
