@@ -249,7 +249,7 @@ body{direction:rtl}
 <section class="workspaceShell">
 <header class="workspaceHeader">
 <div><small>تغییرات واقعی پروژه</small><h2>پیش‌نمایش کد و انتشار</h2><p>اینجا فقط تغییراتی نمایش داده می‌شود که واقعاً در گیت‌هاب ثبت شده باشند.</p></div>
-<div class="wsHeaderActions"><span class="wsLive" id="realConnBadge">● نیازمند اتصال نوشتن امن</span><button id="realChangesClose">✕</button></div>
+<div class="wsHeaderActions"><span class="wsLive" id="realConnBadge">● GitHub Actions امن</span><button id="realChangesClose">✕</button></div>
 </header>
 <div class="wsContent">
 <div class="realChangesGrid">
@@ -264,7 +264,7 @@ body{direction:rtl}
 <p style="font-size:8px;line-height:1.8;color:#9ba8b6;margin:0">اگر یک شاخه واقعی برای پروژه ساخته شده، نام آن را وارد کن تا صفحه مقایسه گیت‌هاب باز شود.</p>
 <div class="realField"><label>نام شاخه تغییرات</label><input id="realBranchInput" placeholder="مثلاً feature/redesign"/></div>
 <div class="realActions"><button class="primary" id="sendRealRequest">ارسال درخواست اجرای واقعی</button><button id="previewRealChanges">پیش‌نمایش تغییرات</button><button id="saveRealBranch">ذخیره شاخه</button><button id="openRealRepo">باز کردن مخزن</button></div>
-<div class="realWarn">برای اینکه نکس واقعاً تغییرات را ثبت و منتشر کند، باید اتصال امن گیت‌هاب و بک‌اند فعال باشد. توکن یا رمز عبور نباید داخل کد این صفحه ذخیره شود.</div>
+<div class="realWarn">بعد از ثبت درخواست در GitHub، Workflow خودکار یک شاخه و Draft PR واقعی می‌سازد. تغییرات کد باید داخل همان PR انجام شوند؛ Merge و Deploy فقط پس از کنترل کیفیت و تایید مدیرعامل مجاز است.</div>
 </section>
 </div></div></section></div>
 <div class="toast" id="toast"></div>
@@ -930,7 +930,7 @@ setInterval(()=>{refreshUI();refreshExecutiveHud()},400);async function bootstra
      ].join('\n');
      localStorage.setItem('roznex-real-request-pending',JSON.stringify({mission,project,branch,createdAt:new Date().toISOString()}));
      if(status)status.textContent='درخواست آماده ثبت در GitHub';
-     notify('درخواست واقعی آماده شد؛ در GitHub ثبتش کن');
+     notify('درخواست آماده شد؛ با ثبت Issue، شاخه و Draft PR خودکار ساخته می‌شود');
      const u='https://github.com/RozhanB01/roznex/issues/new?title='+encodeURIComponent('[ROZNEX EXECUTION] '+mission.slice(0,65))+'&body='+encodeURIComponent(body);
      window.open(u,'_blank','noopener');
    };
