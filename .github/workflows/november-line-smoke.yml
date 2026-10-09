@@ -1,0 +1,51 @@
+name: NOVEMBER LINE deployed smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "roznex-ai-company-os/**"
+      - ".github/workflows/november-line-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  deployed-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check live website and manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          SITE="https://november-line-office-preview.onrender.com"
+          curl --fail --show-error --silent --location --retry 3 --retry-delay 5 --connect-timeout 15 --max-time 60 "$SITE/" -o /tmp/nl-index.html
+          grep -q 'NOVEMBER LINE' /tmp/nl-index.html
+          curl --fail --show-error --silent --location --retry 3 --retry-delay 5 --connect-timeout 15 --max-time 60 "$SITE/manifest.webmanifest" -o /tmp/nl-manifest.json
+          node -e "const m=require('/tmp/nl-manifest.json');if(!m.name.includes('NOVEMBER LINE')||m.display!=='standalone')process.exit(1)"
+      - name: Check live API health without exposing keys
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://november-line-ai-gateway-preview.onrender.com/health"
+          curl --fail --show-error --silent --location --retry 4 --retry-delay 10 --connect-timeout 15 --max-time 90 "$URL" -o /tmp/nl-health.json
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const data=JSON.parse(fs.readFileSync('/tmp/nl-health.json','utf8'));
+          if(data.ok!==true)throw Error('Gateway health check failed');
+          console.log('Gateway reachable. AI configured:',Boolean(data.configured));
+          if(!data.configured)console.log('NOTICE: AI replies require server-side OPENAI_API_KEY.');
+          NODE
+      - name: Check CORS of deployed gateway
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://november-line-ai-gateway-preview.onrender.com/api/chat"
+          GOOD="https://november-line-office-preview.onrender.com"
+          GOOD_STATUS=$(curl -sS -o /dev/null -w '%{http_code}' -X OPTIONS -H "Origin: $GOOD" "$URL")
+          BAD_STATUS=$(curl -sS -o /dev/null -w '%{http_code}' -X OPTIONS -H 'Origin: https://untrusted.example' "$URL")
+          test "$GOOD_STATUS" = "204"
+          test "$BAD_STATUS" = "403"
+          echo "Allowed CORS preflight: $GOOD_STATUS; blocked untrusted origin: $BAD_STATUS"
